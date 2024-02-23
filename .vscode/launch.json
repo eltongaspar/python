@@ -1,5 +1,9 @@
 {
-    "configurations": [
-       
-    ]
+    "python.defaultInterpreterPath": "D:\\Anaconda\\App\\python.exe",
+    "git.autofetch": true,
+    "launch": {
+        "configurations": [
+        
+        ]
+    }
 }
