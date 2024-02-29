@@ -283,8 +283,8 @@ fatlist.sort(reverse=True)
 print(fatlist)
 print(resultfat)
 
- Numeros Primos 
-# Diisivel por 1 por ele mesmo
+#Numeros Primos 
+# 21 - Diisivel por 1 por ele mesmo
 
 num = input(f'Informe um número para ver se é primo:  ')
 num = int(num)
@@ -312,5 +312,82 @@ if qtdenumdiv == 1 or qtdenumdiv == 2:
 elif qtdenumdiv > 2:
     print(f'Numero não é Primo',num)
 
+
+#22 Meta de econmia 
+
+valmes = input(f'Informe o valor mensal a ser economizado:  ')
+meta = input(f'Informe o valor da Meta:  ')
+valmes = float(valmes)
+meta = float(meta)
+qtdemesmeta = meta / valmes
+
+print(f'O total de meses para atingir a meta é',qtdemesmeta,'meses')
+
+
+#23 - Informar temperatura
+# informar sair para finalizar programa 
+#(Celsius * 9/5) + 32.
+
+valid = False
+celsus = ''
+fahrenheit = 0
+
+while valid == False:
+    celsus = input(f'Informe a temperatura ºC para conversão em ºF, para terminar digite sair  ')
+
+    if celsus == 'sair':
+        valid = True
+    elif celsus != 'sair' and valid == False:
+        celsus = int(celsus)
+        fahrenheit = (celsus * (9/5) + 32)
+        print(f'A temperatura ºC',celsus,'é ºF',fahrenheit)
+
+#24 - Analisar triangulo 
+
+print(f'Calculo de tipo de triangulo')
+print(f'Informar os tres lados do triangulo')
+la = input(f'Informa lado A:  ')
+lb = input(f'Informa lado B:  ')
+lc = input(f'Informa lado C:  ')
+
+la = int(la)
+lb = int(lb)
+lc = int(lc)
+
+if la == lb and la == lc:
+    print('Triangulo Equilatero, todos lado iguais')
+
+elif (la == lb and la != lc ) or (la == lc and la != lb)  or (lb == lc and lb != la):
+    print('Triangulo Isosceles, dois lados iguais e um diferente')
+
+elif la != lb and la != lb and lb != lc:
+    print('Triangulo Escaleno, todos lados diferentes')
+
+
+#25 - Ano de nascimento 
+from datetime import date 
+dataatual = date.today().year
+
+
+anonasc = -1
+totalanos = 0
+cont = 0
+anolist = 0
+
+while anonasc < 0:
+    anonasc = input(f'Informe seu Ano de nascimento:  ')
+    anonasc = int(anonasc)
+
+totalanos = dataatual - anonasc
+anolist =anonasc
+
+print(f'Você nasceu em:',anonasc)
+print(f'Ano Atual',dataatual)
+print(f'Você viveu',totalanos,'anos')
+
+while cont <= totalanos:
+    print('Você viveu em: ',anolist)
+    anolist += 1
+    cont += 1
 
 

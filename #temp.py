@@ -1,36 +1,47 @@
 #temp
 
 
+#26 - Funcao Calculo Fatorial
 
 
-# Numeros Primos 
-# Diisivel por 1 por ele mesmo
+def calcfatorial():
+    numinform = -1
+    cont = 1
+    fatlist = []
+    resultfat = 1
 
-num = input(f'Informe um número para ver se é primo:  ')
-num = int(num)
-div = 0
-result = 0
-qtdenumdiv = -1
-qtdenumdivnot = 0
-cont = 0
+    while numinform <= 0:
+        numinform = input(f'Informe um nuemro para calcular o Fatorial:  ')
+        numinform = int(numinform)
 
-for cont in range(num+1):
-    
-    if div > 0:
-        result = num % div
-    
-    div  += 1
+    numfat = numinform
 
-    if result == 0:
-        qtdenumdiv = qtdenumdiv + 1
-    elif result != 0:
-        qtdenumdivnot = qtdenumdivnot + 1
-   
+    while cont <= numinform:
+        fatlist.insert(cont,numfat)
+        cont = cont + 1
+        resultfat = resultfat * numfat
+        numfat = numfat - 1
 
-if qtdenumdiv == 1 or qtdenumdiv == 2:
-    print(f'Numero Primo',num)
-elif qtdenumdiv > 2:
-    print(f'Numero não é Primo',num)
+
+    fatlist.sort(reverse=True)
+    print(fatlist)
+    print(resultfat)
+
+    exib = 0
+    cont = 0
+    while cont <= numinform:
+        exib = (resultfat[1])
+        cont += 1
+
+    return fatlist 
+
+calcfatorial()
+
+
+
+
+
+
 
 
 
