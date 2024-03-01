@@ -1,24 +1,33 @@
-def calcular_pi(n):
-  """
-  Calcula o valor de Pi usando a série de Leibniz.
+# testes
 
-  Args:
-    n: Número de termos da série a serem usados.
+texto = "Hello World"
 
-  Returns:
-    O valor de Pi calculado.
-  """
-  pi = 0
-  for i in range(1, n + 1):
-    if i % 2 == 1:
-      pi += 4 / (2 * i - 1)
-    else:
-      pi -= 4 / (2 * i - 1)
-  return pi
+# Utilizando slicing para extrair "Hello"
+# O índice começa em 0 e vai até 4 (o 5o índice
+#não é incluído)
+palavra = texto[0:5]
 
-n = 10000
+print(palavra)
 
-pi = calcular_pi(n)
 
-print(f"Valor de Pi (série de Leibniz): {pi}")
 
+
+texto = "Bem-vindo ao mundo de Python!"
+
+# Usando find
+indice = texto.find("mundo")
+print(indice) # Saída: 13
+
+# Usando expressões regulares
+import re
+if re.search("Python", texto):
+    print("Python encontrado!")
+
+
+def inverter_string(s):
+    return s[::-1]
+
+# Testando a função
+texto = "Hello"
+texto_invertido = inverter_string(texto)
+print(texto_invertido)  # Saída esperada: "olleH"

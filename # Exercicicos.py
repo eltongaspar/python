@@ -587,6 +587,90 @@ while numinfor != num_ger and numinfor != 'sair':
         
 
 
+    #30 Calculos triangulo por cmath
+
+#Funcao print linhas
+def linhas(qtdetracos):
+    linha = ''
+    cont = 0
+    while cont <= qtdetracos:
+        linha = linha + '-'
+        cont += 1
+    print(linha)
+
+#Funcao arrendodar numeros 
+def roundnum(num,casasdec):
+    import cmath
+    # Convertendo para número real
+    num, phase = cmath.polar(num)
+    
+    # Arredondando o número real
+    numround = round(num,7)
+    return numround
+
+
+# Funcao calculo triangulo retangular
+def calctriangulo():
+
+    import cmath
+    
+    print(f'Calculo de um Triangulo Retangular')
+
+    
+    a = input(f'Informe o Cateto 1 :  ')
+    a = int(a)
+    b = input(f'Informe o Cateto 2:  ')
+    b = int(b)
+
+    hipotenusa = cmath.sqrt(a**2 + b**2)
+    c = hipotenusa
+    seno = cmath.sin(cmath.acos(a/c))
+    cosseno = cmath.cos(cmath.acos(a / c))
+    tangente = cmath.tan(cmath.acos(a/c))
+
+    num = hipotenusa
+    casasdec = 7
+    hipotenusa = roundnum(num,casasdec)
+
+    num = seno
+    seno = roundnum(num,casasdec)
+
+    num = cosseno
+    cosseno = roundnum(num,casasdec)
+
+    num = tangente
+    tangente = roundnum(num,casasdec)
+     
+    linhas(qtdetracos=50)
+    print('Triangulo Retangular, cálculos')
+    print(f'Hiponenusa',hipotenusa)
+    print(f'Seno',seno)
+    print(f'Cosseno',cosseno)
+    print(f'Tangente',tangente)
+    linhas(qtdetracos=50)
+
+#programa principal 
+
+calctriangulo()
+
+# 31 Palavras invertidas 
+
+# funcao para inverter texto
+def textoinvert(text):
+    textinvert = text
+    return textinvert[::-1]
+
+#program principal 
+
+print(f'Informe seu texto para inversão')
+textdigit = input(f'Informe seu texto:')
+
+textinvertexib =  textoinvert(textdigit)
+print('Seu Texto invertido',textinvertexib)
+
+
+
+
 
 
 
