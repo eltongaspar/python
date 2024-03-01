@@ -668,6 +668,21 @@ textdigit = input(f'Informe seu texto:')
 textinvertexib =  textoinvert(textdigit)
 print('Seu Texto invertido',textinvertexib)
 
+# 32 - Informar texto e retonat posicoes impares
+
+def exibtextposimpar(textodigit):
+    textposimpar = textodigit
+    return textposimpar[0::2]
+
+print('Exibir texto com posições de letras impares')
+textdigit = input('Informe seu texto:  ')
+
+textexib = exibtextposimpar(textdigit)
+print('Texto com posições impares')
+print(textexib)
+
+
+
 
 
 
