@@ -535,9 +535,56 @@ def calc_pi_graus_radianos():
     linhas(qtdetracos=50)
 
 
-
-
 calc_pi_graus_radianos()
+
+# 29 - JogoAdivinha Numero
+
+# Funcao Gerar numero
+def num_aleat(num_min,num_max):
+    import random
+    num_ger = random.randrange(num_min,num_max)
+    return num_ger
+
+def exibcontagem(conttela):
+    cont = 0
+    while cont <= conttela:
+        print('Processando',cont)
+        cont += 1
+    
+
+
+#programa principal
+    
+num_min = 1
+num_max = 100
+num_ger = num_aleat(num_min,num_max)
+
+print('Jogo Adivinha Numero')
+print('Gerando Numero Aleatório de ',num_min,num_max )
+conttela = 10
+exibcontagem(conttela)
+
+numinfor = 0
+erro = 0
+print(num_ger)
+
+while numinfor != num_ger and numinfor != 'sair':
+    print('Numero sorteado de',num_min,num_max)
+    numinfor = input('Informe um numero de, sair para terminar  ')
+    numinfor = int(numinfor)
+
+    if numinfor != num_ger:
+        print('Voce errou, tente novamente')
+        erro += 1
+        if numinfor < num_ger:
+            print('Valor Baixo')
+        elif numinfor > num_ger:
+            print('Valor Alto')
+
+    elif numinfor == num_ger:
+        print('Parabens, voce acertou!')
+        print('Total Erros',erro)
+        
 
 
 
