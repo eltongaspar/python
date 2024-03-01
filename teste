@@ -1,5 +1,24 @@
-nome = input ('Digite seu nome')
-saudacao = 'Olá'   + nome
-print(saudacao)
+def calcular_pi(n):
+  """
+  Calcula o valor de Pi usando a série de Leibniz.
 
+  Args:
+    n: Número de termos da série a serem usados.
+
+  Returns:
+    O valor de Pi calculado.
+  """
+  pi = 0
+  for i in range(1, n + 1):
+    if i % 2 == 1:
+      pi += 4 / (2 * i - 1)
+    else:
+      pi -= 4 / (2 * i - 1)
+  return pi
+
+n = 10000
+
+pi = calcular_pi(n)
+
+print(f"Valor de Pi (série de Leibniz): {pi}")
 

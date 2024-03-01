@@ -391,3 +391,157 @@ while cont <= totalanos:
     cont += 1
 
 
+#26 - Funcao Calculo Fatorial
+
+
+def calcfatorial():
+    numinform = -1
+    cont = 1
+    fatlist = []
+    resultfat = 1
+
+    while numinform <= 0:
+        numinform = input(f'Informe um nuemro para calcular o Fatorial:  ')
+        numinform = int(numinform)
+
+    numfat = numinform
+
+    while cont <= numinform:
+        fatlist.insert(cont,numfat)
+        cont = cont + 1
+        resultfat = resultfat * numfat
+        numfat = numfat - 1
+
+
+    fatlist.sort(reverse=True)
+    print(fatlist)
+    print(resultfat)
+
+    exib = 0
+    cont = 0
+    while cont <= numinform:
+        exib = (resultfat[1])
+        cont += 1
+
+    return fatlist 
+
+calcfatorial()
+
+#27 -  Calculos aritmeticos 
+
+#funcao aritmetica 
+
+def operaritmetica(a,b,oper):
+    if oper == '+':
+        c = a+b
+        mens = 'Soma' 
+    elif oper == '-':
+        c = a-b 
+        mens = 'Subtração'
+    elif oper =='*':
+        c = a*b 
+        mens = 'Multiplicação'
+    elif oper == '/':
+        if b == 0:
+            mens = 'Erro divisão por zero!'
+            c = 0
+        elif b != 0:
+            c = a/b 
+            mens = 'Divisão'
+
+    print(f'Numeros Informados','A:',a,'B:',b)
+    print(f'Operação aritmética',oper)
+    print(mens)
+    print(f'Resultado:',c)
+    
+    return c,mens
+
+#programa principal 
+a = input(f'Informe valor A:  ')
+a = int(a)
+
+b = input(f'Informe valor B:  ')
+b = int(b)
+
+oper = ''
+while oper != '+' and oper != '-' and oper != '*' and oper != '/':
+    oper = input('Informe a operação aritmética: Soma +,Subtração -,Multiplicação*,Divisão/ :  ')
+
+operaritmetica(a,b,oper)
+
+
+
+#28 
+import cmath 
+# Funcao Calcular Graus radianos 
+
+def linhas(qtdetracos):
+    linha = ''
+    cont = 0
+    while cont <= qtdetracos:
+        linha = linha + '-'
+        cont += 1
+    print(linha)
+
+
+def calcular_pi(n):
+    """
+    Calcula o valor de Pi usando a série de Leibniz.
+
+    Args:
+    n: Número de termos da série a serem usados.
+
+    Returns:
+    O valor de Pi calculado.
+    """
+    pi = 0
+    for i in range(1, n + 1):
+        if i % 2 == 1:
+            pi += 4 / (2 * i - 1)
+        else:
+            pi -= 4 / (2 * i - 1)
+
+    print(f"Valor de Pi (série de Leibniz): {pi}")
+    return pi
+
+
+def calc_pi_graus_radianos():
+    linhas(qtdetracos=50)
+    print('Calculo Graus Radianos')
+    print('Calculos com Cmath e Padrão')
+    linhas(qtdetracos=50)
+
+    import cmath
+
+    n = input('Informe a precisão de PI:')
+    n = int(n)
+    pi = calcular_pi(n)
+    
+    graus = input('Informe o valor dos Graus para calculo ')
+    graus = float(graus)
+    radianospad = 0
+    radianospad = graus * pi /180
+
+    linhas(qtdetracos=50)
+    print(f'PI Padrao',pi)
+    print(f'Graus Radianos Padrao',radianospad)
+    linhas(qtdetracos=50)
+
+    picmath = cmath.pi
+    radianoscalcmath = graus * picmath / 180
+    linhas(qtdetracos=50)
+    print(f'PI Cmath',picmath)
+    print(f'Graus Radianos Cmath',radianoscalcmath)
+    linhas(qtdetracos=50)
+
+
+
+
+calc_pi_graus_radianos()
+
+
+
+
+
+
+
