@@ -683,6 +683,40 @@ print(textexib)
 
 
 
+#34 Criar template e substituir campos informados 
+
+# Funcao Template 
+def template_alter(nome,data):
+    template = (f""" 
+    Olá [nome], tudo bem?
+    Esperamos que sim!
+    Gostariamos de informar que estamso notificando você,
+    para entar em contato conosco urgente.
+    Att.
+                
+    [data]
+    Empresa S.A
+    """)
+
+    template_ret = template.replace("[nome]",nome).replace("[data]",data)
+    
+    return template_ret
+
+#programa principal
+    
+# Imoportar biblioteca data 
+import datetime
+
+print(f'Templat Notificação')
+nome = input(f'Informe o nome:  ')
+data = datetime.datetime.now()
+data =  data.strftime("%D")
+
+template_exib = template_alter(nome,data)
+print(template_exib)
+
+
+
 
 
 
