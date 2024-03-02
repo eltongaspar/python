@@ -753,6 +753,27 @@ template_exib = template_alter(nome,data)
 print(template_exib)
 
 
+# 36 - Contar caracter
+
+#funcao cont caracteres 
+def cont_carater(text,text_localiz):
+    import re 
+    
+    
+    cont = 0
+    qtd_caracter = len(text)
+    qtde_caracter_localiz = 0
+
+    while cont < qtd_caracter:
+        temp = text[cont]   
+        if re.search(text_localiz,temp):
+            print('Localizado posição!',cont)
+            qtde_caracter_localiz += 1
+
+        cont += 1
+    
+    return qtde_caracter_localiz
+
 
 
 
