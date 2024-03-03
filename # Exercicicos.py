@@ -774,6 +774,18 @@ def cont_carater(text,text_localiz):
     
     return qtde_caracter_localiz
 
+#programa principal 
+
+print('Contar quantidade de caracteres eum um texto ou palavra')
+text = input('Informe aqui seu Texto / palavras:  ')
+text_localiz = input('Informe o caracter a ser contado:  ')
+
+cont_caracter = cont_carater(text,text_localiz)
+
+print('Total de repetições do caracter:  ',cont_caracter)
+
+
+
 
 
 
