@@ -785,6 +785,201 @@ cont_caracter = cont_carater(text,text_localiz)
 print('Total de repetições do caracter:  ',cont_caracter)
 
 
+#38 string é um palíndromo (uma palavra que é lida da mesma forma de trás para frente, como "radar").
+
+
+#Funcao para string ser reversa
+
+def func_text_reverse(text):
+
+    text_revers = ''.join(reversed(text))
+
+    if text == text_revers:
+        print(f'''A palavra é um palíndromo,
+              uma palavra que é lida da mesma forma de trás para frente''')
+        print(f'Palavra original:  ',text)
+        print(f'PAlavra reversa: ',text_revers)
+
+    elif text != text_revers:
+        print(f'A palavra não é um palíndromo ')
+
+    tam_text = len(text)
+    cont = 0
+    is_palíndromo = 0
+    not_palíndromo = 0
+
+    while cont <  tam_text:
+        if text[cont] == text_revers[cont]:
+            is_palíndromo += 1
+        elif text[cont] != text_revers[cont]:
+            not_palíndromo += 1
+
+        cont += 1
+
+    if not_palíndromo == 0:
+        print(f'A palavra é um palíndromo Funcao While',text,text_revers)
+    elif not_palíndromo > 0:
+        print(f'A palavra Não é um palíndromo Funcao While',text,text_revers)
+       
+
+    
+#programa principal 
+print('Palíndromo, se uma palavra é igual escrita de tras para frente')
+
+text = input('Digite a palavra:  ') 
+
+func_text_reverse(text)
+
+
+#39 Criando arquivos 
+import os
+
+file = open('D:/Dados/meu_arquivo.txt','x')
+file.close()
+
+if os.path.exists('D:/Dados/meu_arquivo.txt'): 
+    print('Arquivo criado com sucesso')
+else:
+    print('Atquivo não localiado!')
+
+
+# 40 Abrir aquivo e exibir seus dados 
+
+#Abrindo o arquivo
+
+file = 'D:/Dados/meu_arquivo.txt'
+
+
+def open_file(file):
+    file = open(file,'r')
+    return file
+    
+
+def close_file(file):
+    file.close()
+    
+
+#valida se o arquivo e valida 
+print('Validador:',open_file(file).readable())
+close_file(open_file(file))
+
+#Ler contudo do arquivo
+print(open_file(file).read())
+close_file(open_file(file))
+
+#Ler contudo do arquivo
+print(open_file(file).readline())
+close_file(open_file(file))
+
+#Ler contudo do arquivo
+print(open_file(file).readlines())
+close_file(open_file(file))
+
+#Arquivo em lista
+lista = open_file(file).readlines()
+print(lista)
+close_file(open_file(file))
+
+
+#41 Alterando arquivo sem perder dados 
+file = 'D:/Dados/meu_arquivo.txt'
+
+def open_file(file):
+    file = open(file,'r')
+    return file
+    
+
+def close_file(file):
+    file.close()
+    
+
+#Funcao open alteracao e close file
+def open_file_alt(file):
+    file = open(file,'a')
+    return file
+    
+
+def close_file(file):
+    file.close()
+
+#programa principal 
+
+# Alterando arquivo
+open_file_alt(file).write('Adicionando uma nova linha ao arquivo.\n')
+close_file(open_file_alt(file))
+
+#Ler contudo do arquivo
+print(open_file(file).read())
+close_file(open_file(file))
+
+
+
+#42 Lista diretori e imprimir conteudo 
+
+# Usandoa biblioteca os
+import os
+import time
+
+#defindo diretorio
+dir = 'D:/Dados'
+
+# Listando diretorio 
+files = os.listdir(dir)
+#Contagem de arquivos 
+num_files = len(files)
+
+print(f'Listando, contando e exibindo arquivos')
+print(f'Diretorio',dir)
+print(f'Total Arquivos:',num_files)
+time.sleep(5)
+
+for file_conteud in files:
+    with open(os.path.join(dir,file_conteud),'r') as f:
+        conteudo = f.read
+        print(file_conteud)
+        print(conteudo)
+        time.sleep(1)
+
+
+#43 - Copiando dados de um arquivo para outr
+
+import os
+file = 'D:/Dados/meu_arquivo.txt'
+file_des = 'D:/Dados/meu_arquivo-copia.txt'
+
+with open(file,'r') as origem:
+    with open(file_des,'w') as destino:
+        dados = origem.read()
+        os.write(destino.fileno(),dados.encode())
+
+if os.path.exists(file_des):
+    print(f'Arquivo Existe, copiado!')
+    
+else: 
+    print(f'Hum, não achei o arquivo:(!')
+
+error = 0
+acept = 0
+
+with open(file,'r') as origem:
+    with open(file_des,'r') as destino:
+        for lin1,lin2 in zip(origem,destino):
+            if lin1 != lin1:
+                error += 1
+            else:
+                acept += 1
+                
+
+
+if error == 0 :
+    print('Arquivos iguais, copia exata!')
+
+elif error > 0:
+    print(f'''Arquivos diferentes, 
+            algo de errado não esta certo, 
+            verifique!!!''')
+
+
 
 
 
