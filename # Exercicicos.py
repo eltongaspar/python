@@ -981,6 +981,158 @@ elif error > 0:
 
 
 
+# 44 - Contar linhas e caracter de um arquivos
+
+import os
+import re
+
+files = 'D:/Dados/meu_arquivo.txt'
+
+open_files = open(files, 'r')
+
+# Validando se arquivo existe
+if (open_files.readable()):
+    print('Arquivo valido')
+else:
+    print('Arquivo não existe!')
+open_files.close()   
+
+
+# Validando se arquivo existe, sem necessidade de abrir
+if os.path.exists(files):
+    print('Arquivo Existe!')
+    
+else: 
+    print('Hum, não achei o arquivo:(!')
+
+#Exibindo dados do aquiro, linha a linha
+print('Exibindo dados do arquivo, linha a linha, metodo 1')
+with open (files,'r') as temp:
+    for linha in temp:
+        print(linha)
+
+
+#Exibindo dados do arquiro, linha a linha
+open_files = open(files, 'r')
+print('Exibindo dados do arquivo, linha a linha, metodo 2')
+print(open_files.readlines())
+open_files.close()   
+
+
+print(f'Contagem de palavras')
+with open (files,'r') as temp:
+    texto = temp
+    texto = temp.read()
+    #Contando palavras 
+    palavras = texto.split()
+
+num_palavras = len(palavras)
+print(f'Numero de palavras é:',num_palavras)
+
+
+#Contando linhas
+print('Contagem de linhas no arquivo')
+with open(files,'r') as linhas:
+    num_linhas = len(linhas.readlines())
+print(f'Numero de linhas: ',num_linhas)
+
+#Contando caracteres 
+print(f'Contagem de caracteres')
+with open(files,'r') as temp_caracter:
+    caracter = temp_caracter.read() 
+    num_caracter = len(re.findall(r".",caracter))
+print('Total caractres',num_caracter)
+
+
+#45 Ler arquivo com as palavras Python
+
+files = 'D:/Dados/meu_arquivo.txt'
+open_files = open(files, 'r')
+
+palavra_localiz = input('Informe a palavra a ser localizada no arquivo:  ')
+localiz = 0
+localiz_not = 0
+
+with open(files,'r') as temp:
+
+    for linha in temp:
+        if palavra_localiz in linha:
+            localiz += 1
+        else:
+            localiz_not += 1
+
+if localiz > 0:
+    print('Palavra encontrada!')
+else:
+    print('Palavra não encontrada no arquivo')
+
+
+#47 Criar arquivo manualmente e ler linhas em modo formatado
+
+files = 'D:/Dados/dados.txt'
+open_files = open(files, 'r')
+
+#with open(files,'r') as temp:
+
+
+
+#Exibindo dados do aquiro, linha a linha
+print('Exibindo dados do arquivo, linha a linha, metodo 1')
+with open (files,'r') as temp:
+    for linha in temp:
+        print(''.join(linha))
+
+        #48 Criando arquivos de logs, sem perder dados 
+files = 'D:/Dados/logs.txt'
+open_files = open(files, 'a')
+
+import datetime
+import os
+import re
+
+
+if os.path.exists(files):
+    print('Arquivo Log localizado, incluindo novos logs!')
+else: 
+    print('Hum, não achei o arquivo, criando arquivo de logs!(!')
+
+
+data_hora_atual = datetime.datetime.now()
+data_hora_atual = str(data_hora_atual)
+
+
+
+
+with open (files,'r') as temp:
+    texto = temp
+    texto = temp.read()
+    #Contando palavras 
+    palavras = texto.split()
+
+num_palavras = len(palavras)
+num_palavras = str(num_palavras)
+
+#Contando linhas
+with open(files,'r') as linhas:
+    num_linhas = len(linhas.readlines())
+    num_linhas = str(num_linhas)
+
+
+#Contando caracteres 
+with open(files,'r') as temp_caracter:
+    caracter = temp_caracter.read() 
+    num_caracter = len(re.findall(r".",caracter))
+    num_caracter = str(num_caracter)
+
+sequenc = num_linhas + num_palavras + num_caracter + data_hora_atual
+
+
+#Criando arquivos logs.
+with open (files,'a') as temp:
+    temp.write(f'Logs' + ' ' + num_linhas + ' ' + data_hora_atual + ' ' + 'Sequencia'+ ' ' + sequenc + '\n')
+    #temp.write(f'Logs' + ' '+ num_linhas + '  ' + data_hora_atual + ' ' + 'Sequncial' + num_linhas + num_palavras + num_caracter + '\n')
+    print('Logs salvos com sucesso!')
+
 
 
 
