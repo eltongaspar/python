@@ -1133,6 +1133,118 @@ with open (files,'a') as temp:
     #temp.write(f'Logs' + ' '+ num_linhas + '  ' + data_hora_atual + ' ' + 'Sequncial' + num_linhas + num_palavras + num_caracter + '\n')
     print('Logs salvos com sucesso!')
 
+# 48 - Tuplas 
+
+# Criação de tuplas - imutaveis
+tuplas_numeros = (1,2,3,4,5)
+#Exibindo o 3 item, inicio do indece = 0
+print('Exibir Item 03 da Tuplas',tuplas_numeros[3])
+
+#49 Tuplas de cores, alterar sequncia.
+#Criacao tupla
+tuplas_cores = ('vermelho','azul','verde','azul','amarelo')
+
+#Contagem do item
+cor_azul_qtde = tuplas_cores.count('azul')
+#Posicao item
+cor_verde_pos = tuplas_cores.index('verde')
+
+print(f'Total(is) Cor Azul:',cor_azul_qtde)
+print(f'Posicao Cor Verde',cor_verde_pos)
+
+
+#50 Inventario frutas alterar dados da Lista 
+
+#Criando listas
+frutas = ['maçã','banana','cereja']
+print(f'Frutas disponiveis',frutas)
+
+#Adicionando item da lista - fim da lista 
+frutas.append('laranja')
+
+#Removendo item da lista remove = texto
+
+frutas.remove('banana')
+
+print(f'Frutas disponiveis',frutas)
+
+#Adiciona item por indice - refazendo lista 
+frutas.insert(1,'banana')
+frutas.pop()
+
+print(f'Frutas disponiveis',frutas)
+
+#Remvendo item por indice - 
+del_item = frutas.index('banana')
+del frutas[del_item]
+
+#Adicionando item da lista - fim da lista 
+frutas.append('laranja')
+
+print(f'Frutas disponiveis',frutas)
+
+
+# 51 Ordenando lista 
+
+#Lista 
+numeros = [3, 1, 4, 1, 5, 9, 2]
+
+#Ordenaso lista
+numeros.sort()
+
+#Exibindo resultados
+print('Lista ordenada',numeros)
+
+
+#52 - Lista de numeros de 1 a 10 e calcular sua raiz quadrada
+
+#impostando biblioteca
+import math
+
+#Criandi lista vazia
+num_lista  = []
+
+#Gerando numeros de 1 a 10
+for num in range(1,11):
+    num_lista.insert(num,num)
+
+#exibi lista 
+print(f'Lista Numeros',num_lista)
+
+result = []
+for num in num_lista:
+    result.insert(num,num**2)
+
+#exibi lista 
+print(f'Lista Resultado Ao **',result)
+
+
+#53 - Criar dicionario de aluno nome,idade,curso e nota
+# informar nota e exclir idade 
+
+dic_aluno =dict()
+dic_aluno = {'aluno': 'Elton','idade' : '40', 'curso' : 'TI-AI', 'nota' : '0'}
+
+#Exibir dados
+print(f'Dados antes das modificações',dic_aluno)
+
+#atualizando dados chave nota
+dic_aluno['nota'] = '10'
+
+#deletando chave 
+del dic_aluno['idade']
+
+#Exibir dados
+print(dic_aluno)
+
+
+#Exibindo somente valores
+print(dic_aluno.values())
+#Exibindo Campos
+print(dic_aluno.keys())
+#Exibindo tudo
+print(dic_aluno.items())
+
 
 
 
