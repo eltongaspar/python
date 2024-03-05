@@ -1246,6 +1246,26 @@ print(dic_aluno.keys())
 print(dic_aluno.items())
 
 
+#54 Relação de numeros e seus quadrados 
+# Gerando graficos 
+
+import matplotlib.pyplot as plt
+
+# Dados
+x = range(1, 11)
+y = [i**2 for i in x]
+
+# Criando o gráfico
+plt.plot(x, y)
+
+# Adicionando títulos
+plt.title("Relação entre Números e Seus Quadrados")
+plt.xlabel("Número")
+plt.ylabel("Quadrado do Número")
+
+# Mostrando o gráfico
+plt.show()
+
 
 
 
