@@ -1267,6 +1267,32 @@ plt.ylabel("Quadrado do Número")
 plt.show()
 
 
+#55 - Gerando Grafico Produtos x Vendas
+
+import matplotlib.pyplot as plt
+
+#Dados 
+x = range (1,6)
+y = [1000,1500,2500,3200,1100]
+
+#Criando Grafico barras
+#plt.plot(x,y)
+
+#Define grafico em barras 
+plt.bar(x,y)
+
+#Rotulos
+plt.title('Produtos x Vendas')
+plt.xlabel('Produtos')
+plt.ylabel('Vendas')
+
+#Define escala 
+plt.xlim(1,6)
+
+#Exibi grafico
+plt.show()
+
+
 
 
 
