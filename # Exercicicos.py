@@ -1266,6 +1266,25 @@ plt.ylabel("Quadrado do Número")
 # Mostrando o gráfico
 plt.show()
 
+#54 Relação de numeros e seus quadrados 
+# Gerando graficos 
+
+import matplotlib.pyplot as plt
+
+# Dados
+x = range(1, 11)
+y = [i**2 for i in x]
+
+# Criando o gráfico
+plt.plot(x, y)
+
+# Adicionando títulos
+plt.title("Relação entre Números e Seus Quadrados")
+plt.xlabel("Número")
+plt.ylabel("Quadrado do Número")
+
+# Mostrando o gráfico
+plt.show()
 
 #55 - Gerando Grafico Produtos x Vendas
 
@@ -1291,6 +1310,130 @@ plt.xlim(1,6)
 
 #Exibi grafico
 plt.show()
+
+#56 - Gerar 20 numeros X e Y com graficos de dispersão 
+
+import matplotlib.pyplot as plt
+import random 
+
+#funcao para gerar num aleatorio 
+# funcao recebe itervalo para numeracao de numero
+def num_random (num_min,num_max):
+    num = random.randrange(num_min,num_max)
+    return num 
+
+#variaveiis 
+num_min = 1
+num_max = 100
+x = []
+y = []
+cont = 0
+
+#gerando lista X random
+for cont in range(1,21):
+    num = num_random(num_min,num_max)
+    x.insert(cont,num)
+
+#zerando o cont 
+cont = 0 
+
+#gerando lista Y random
+for cont in range(1,21):
+    num = num_random(num_min,num_max)
+    y.insert(cont,num)
+
+# configuranod layout
+# color - cor do pontos 
+#marker - maracos 
+#linestyle - linha estilo
+plt.scatter(x,y,color='red',marker='x',linestyle='-')
+#ativando grid
+plt.grid(True)
+    
+#Titulos 
+plt.title('Grafico de Dispersão')
+plt.xlabel('Eixo X Numeros')
+plt.ylabel('Eixo Y Numeros')
+
+plt.show()
+
+# 57 Analise de dados complexos com 4 tipos de graficos
+
+import matplotlib.pyplot as plt
+import random 
+import string 
+import numpy as np
+
+#funcao para gerar num aleatorio 
+# funcao recebe itervalo para numeracao de numero
+def caracter_random():
+    caracter = random.choice(string.ascii_uppercase)
+    return caracter
+
+def num_random (num_min,num_max):
+    num = random.randrange(num_min,num_max)
+    return num 
+
+#variaveiis 
+num_min = 1
+num_max = 100
+x = []
+y = []
+cont = 0
+caracter = ''
+
+
+
+#gerando lista Y random
+for cont in range(1,50):
+    num = num_random(num_min,num_max)
+    y.insert(cont,num)
+
+#zerando o cont 
+cont = 0 
+#gerando lista X random
+for cont in range(1,50):
+    caracter = caracter_random()
+    x.insert(cont,caracter)
+    
+    
+#Definindo axs
+fig, axs = plt.subplots(2,2,figsize=(10, 8))
+
+#Plotando diferentes graficos nos subplots
+axs[0,0].scatter(x, y,color='blue',marker='x',linestyle='-') 
+axs[0,0].grid(True)
+axs[0,1].bar(x, y,color='red',linestyle='--')
+axs[0,1].grid(True)
+axs[1,0].plot(x,y,color='gold',marker='o',linestyle='-')
+axs[1,0].grid(True)
+axs[1,1].hist(x,color='orange',linestyle='-')
+axs[1,1].grid(True)
+    
+#Definindo títulos dos subplots
+axs[0,0].set_title("Gráfico Dispersão")
+axs[0,0].set_xlabel("Eyxo X Dados ") 
+axs[0,0].set_ylabel("Eyxo Y Numeros ") 
+axs[0,1].set_title("Gráfico Dispersão")
+axs[0,1].set_xlabel("Eyxo X Dados ") 
+axs[0,1].set_ylabel("Eyxo Y Numeros ") 
+axs[1,0].set_title("Gráfico Dispersão")
+axs[1,0].set_xlabel("Eyxo X Dados ") 
+axs[1,0].set_ylabel("Eyxo Y Numeros ")     
+axs[1,1].set_title("Gráfico Dispersão")
+axs[1,1].set_xlabel("Eyxo X Dados ") 
+axs[1,1].set_ylabel("Eyxo Y Numeros ") 
+
+
+# configuranod layout
+# color - cor do pontos 
+#marker - maracos 
+#linestyle - linha estilo
+#plt.scatter(x,y,color='blue',marker='x',linestyle='-')
+#ativando grid
+#plt.grid(True)
+
+
 
 
 
