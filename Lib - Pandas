@@ -1,0 +1,27 @@
+##Pandas
+
+import pandas as pd
+# Dados de exemplo
+dados = {'Data': ['2024-01-01', '2024-01-02',
+                  '2024-01-03', '2024-01-04'],
+                  'Vendas_Produto_A': [100, 120, 90, 110],
+                  'Vendas_Produto_B': [80, 85, 88, 85]
+         }
+# Criar um DataFrame
+df = pd.DataFrame(dados)
+1# Converter a coluna 'Data' para o tipo datetime
+df['Data'] = pd.to_datetime(df['Data'])
+# Manipulação de Dados: Adicionar uma coluna 'Receita_Total'
+
+preco_produto_a = 20 # Supondo um preço fixo
+preco_produto_b = 15
+df['Receita_Total'] = df['Vendas_Produto_A']*preco_produto_a + df['Vendas_Produto_B']*preco_produto_b
+
+# Análise Básica
+media_vendas_a = df['Vendas_Produto_A'].mean()
+receita_total = df['Receita_Total'].sum()
+print("DataFrame com vendas e receita total:")
+print(df)
+print("\nMédia de Vendas - Produto A:",media_vendas_a)
+
+print("Receita Total:", receita_total)
