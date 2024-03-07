@@ -1,0 +1,193 @@
+##Numpy
+
+##Arrays multidimensionais:
+print(f'\n Arrays multidimensionais \n')
+import numpy as np
+a = np.array([[1, 2, 3], [4, 5, 6]])
+print(a)
+
+
+##Operações matemáticas eficientes:
+print(f'\n Operações matemáticas eficientes:\n')
+import numpy as np
+a = np.array([[1, 2, 3], [4, 5, 6]])
+print('A = \n', a)
+print('***' *10)
+b = np.array([1, 2, 3])
+print('B = \n',b)
+print('***' *10)
+c = a * b
+print('C = \n',c)
+
+##Funções de álgebra linear:
+import numpy as np
+print(f'\n Funções de álgebra linear \n')
+# Definindo a matriz A e o vetor B
+A = np.array([[4, 2, 1], [2, 3, 5], [1, 5, 7]])
+B = np.array([9, 8, 10])
+
+# Resolvendo o sistema de equações Ax = B
+x = np.linalg.solve(A, B)
+
+# Calculando o determinante de A
+determinante = np.linalg.det(A)
+
+# Encontrando autovalores e autovetores de A
+autovalores, autovetores = np.linalg.eig(A)
+
+# Realizando a decomposição em valores singulares (SVD)
+
+u, s, vh = np.linalg.svd(A)
+
+print("Solução do sistema Ax = B:", x)
+print("Determinante de A:", determinante)
+print("Autovalores de A:", autovalores)
+print("Autovetores de A:", autovetores)
+print("Decomposição SVD de A: U=", u, ", S=", s, ",VH=", vh)
+
+
+##Transformadas de Fourier:
+print(f'\n Funções de álgebra linear \n')
+
+import numpy as np
+import matplotlib.pyplot as plt
+# Gerando um sinal de exemplo
+t = np.linspace(0, 1.0, 500)
+sinal = np.sin(2 * np.pi * 5 * t) + np.sin(2 * np.pi * 10 * t)
+# Sinal com duas frequências
+
+# Realizando a Transformada de Fourier
+fft = np.fft.fft(sinal)
+# Preparando o vetor de frequência para plotagem
+freq = np.fft.fftfreq(len(t), d=t[1]-t[0])
+# Manipulando o espectro de frequências (por exemplo,
+#removendo frequências acima de 8 Hz)
+
+fft[np.abs(freq) > 8] = 0
+# Realizando a Transformada Inversa de Fourier
+sinal_filtrado = np.fft.ifft(fft)
+
+# Plotando os resultados
+plt.figure(figsize=(12, 6))
+plt.subplot(2, 1, 1)
+plt.plot(t, sinal)
+plt.title('Sinal Original')
+
+##Geração de números aleatórios: NumPy
+print(f'\n Geração de números aleatórios: NumPy \n')
+
+import numpy as np
+# Geração de um número aleatório simples entre 0 e 1
+num_aleatorio = np.random.random()
+print("Número aleatório simples:", num_aleatorio)
+# Criação de um array 3x3 com números aleatórios
+#seguindo uma distribuição uniforme [0, 1)
+array_uniforme = np.random.rand(3, 3)
+print("Array 3x3 com distribuição uniforme:\n",array_uniforme)
+# Criação de um array 3x3 com números aleatórios
+#seguindo uma distribuição normal (Gaussiana) com
+#média 0 e desvio padrão 1
+array_normal = np.random.randn(3, 3)
+print("Array 3x3 com distribuição normal:\n",array_normal)
+
+# Geração de um array de inteiros e embaralhamento
+#dos elementos
+
+array_inteiros = np.arange(10) # Cria um array de 0 a 9
+
+np.random.shuffle(array_inteiros)
+print("Array de inteiros embaralhado:\n",array_inteiros)
+
+##Manipulação de forma de array 
+print(f'\n Manipulação d forma de array\n')
+
+import numpy as np
+# Criando um array inicial
+array_original = np.arange(12) # Um array de 0 a 11
+print('Array original\n:',array_original)
+# Redimensionando o array para uma forma 3x4
+array_reshape = array_original.reshape(3, 4)
+print("Array redimensionado (3x4):\n", array_reshape)
+# Transpondo o array
+array_transposto = array_reshape.T
+print("Array transposto:\n", array_transposto)
+# Empilhamento vertical e horizontal de arrays
+array_v1 = np.array([1, 2, 3])
+array_v2 = np.array([4, 5, 6])
+array_vertical = np.vstack((array_v1, array_v2))
+print("Empilhamento vertical:\n", array_vertical)
+array_horizontal = np.hstack((array_v1.reshape(-1, 1),array_v2.reshape(-1, 1)))
+print("Empilhamento horizontal:\n", array_horizontal)
+# Dividindo um array em 3 partes iguais
+array_dividido = np.split(array_original, 3)
+print("Array dividido em 3 partes:\n", array_dividido)
+
+##Broadcasting:
+print(f'\n Broadcasting:\n')
+
+import numpy as np
+
+# Adicionar um escalar a um array
+array = np.array([[1, 2, 3], [4, 5, 6]])
+escalar = 10
+resultado_escalar = array + escalar
+print("Adicionar escalar a array:\n",resultado_escalar)
+
+# Multiplicar cada linha de uma matriz por um vetor
+matriz = np.array([[1, 2, 3], [4, 5, 6]])
+vetor = np.array([1, 2, 3])
+resultado_multiplicacao = matriz * vetor
+print("Multiplicar matriz por vetor:\n",resultado_multiplicacao)
+
+# Adicionar um vetor a cada linha de uma matriz
+vetor_linha = np.array([1, 2, 3])
+resultado_soma = matriz + vetor_linha
+print("Adicionar vetor a cada linha de uma matriz:\n", resultado_soma)
+
+##Operações lógicas e comparação:
+print(f'Operações lógicas e comparação: \n')
+
+import numpy as np
+
+# Criando um array de exemplo
+array = np.array([1, 2, 3, 4, 5, 6])
+
+# Operações de Comparação
+# Encontrar elementos maiores que 3
+maior_que_3 = array > 3
+print("Elementos maiores que 3:", maior_que_3)
+
+# Combinação de Operações Lógicas
+# Encontrar elementos menores que 5 E maiores que 2
+menor_que_5_e_maior_que_2 = np.logical_and(array > 2,array < 5)
+
+print("Elementos menores que 5 e maiores que 2:",menor_que_5_e_maior_que_2)
+
+# Indexação Booleana
+# Selecionar elementos que são maiores que 3
+elementos_selecionados = array[array > 3]
+print("Elementos maiores que 3:",elementos_selecionados)
+
+##Funções de entrada/saída:
+print(f'\n Funções de entrada/saída: \n ')
+
+import numpy as np
+
+# Criando um array de exemplo
+array = np.array([[1, 2, 3], [4, 5, 6]])
+
+# 1. Escrever um Array NumPy para um Arquivo de Texto (CSV)
+np.savetxt("array.csv", array, delimiter=",")
+
+# 2. Ler um Array NumPy de um Arquivo de Texto (CSV)
+array_lido = np.loadtxt("array.csv", delimiter=",")
+print("Array lido do arquivo CSV:\n", array_lido)
+
+# 3. Salvar um Array NumPy em um Formato Binário
+np.save("array.npy", array)
+
+# 4. Carregar um Array NumPy de um Formato Binário
+array_carregado = np.load("array.npy")
+print("Array carregado do arquivo binário:\n",
+
+array_carregado)
