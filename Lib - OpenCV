@@ -1,21 +1,25 @@
 ##OpenCV
 
+##OpenCV
+
 # Importar as bibliotecas necessárias
 import cv2 # OpenCV para processamento de imagens
 from matplotlib import pyplot as plt # Matplotlib para
 #exibição de imagens
-from google.colab import files # Módulo do Google Colab
+#from google.colab import files # Módulo do Google Colab
 #para upload de arquivos
 
 # Fazer o upload da imagem
-uploaded = files.upload() # Abre um prompt de upload
+#uploaded = files.upload() # Abre um prompt de upload
 #de arquivo para carregar uma imagem do seu computador
-image_name = next(iter(uploaded)) # Obtém o nome do arquivo carregado
+#image_name = next(iter(uploaded)) # Obtém o nome do arquivo carregado
+
+image_name = 'D:/Diffusion/Imagens-AI/Images/cobrecom.png'
 
 # Carregar a imagem
 imagem = cv2.imread(image_name) # Lê o arquivo de
-
 #imagem para uma variável usando o OpenCV
+
 # Converter a imagem para escala de cinza
 imagem_cinza = cv2.cvtColor(imagem, cv2.COLOR_BGR2GRAY)
 # Converte a imagem de BGR (Blue, Green, Red) para escala de cinza
