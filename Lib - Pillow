@@ -1,0 +1,40 @@
+## Pillow
+#Importar as bibliotecas necessárias
+from PIL import Image
+#from google.colab import files
+import io
+import matplotlib.pyplot as plt
+import cv2 # OpenCV para processamento de imagens
+
+# Fazer o upload da imagem
+#uploaded = files.upload()
+#image_name = next(iter(uploaded))
+image_name = ('D:/Diffusion/Imagens-AI/Images/cobrecom.png')
+
+
+# Carregar a imagem usando PIL
+#imagem = Image.open(io.BytesIO(image_name)) #uso google colab
+imagem = Image.open(image_name)
+
+
+# Redimensionar a imagem
+imagem_redimensionada = imagem.resize((200, 200))
+# Girar a imagem
+imagem_girada = imagem_redimensionada.rotate(90)
+# Converter a imagem para o modo RGB
+if imagem_girada.mode != 'RGB':
+    imagem_girada = imagem_girada.convert('RGB')
+# Salvar a imagem modificada
+imagem_girada.save('imagem_modificada.jpg')
+# Exibir as duas imagens usando matplotlib
+plt.figure(figsize=(12, 6))
+plt.subplot(1, 2, 1)
+plt.imshow(imagem)
+plt.title('Imagem Original')
+plt.axis('off')
+
+plt.subplot(1, 2, 2)
+plt.imshow(imagem_girada)
+plt.title('Imagem Modificada')
+plt.axis('off')
+plt.show()
