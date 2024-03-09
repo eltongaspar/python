@@ -1,3 +1,35 @@
+##Keras
+
+import tensorflow as tf
 from tensorflow.keras.models import Sequential
-from tensorflow.keras.layers import Dense, Flatten,
-Conv2D
+from tensorflow.keras.layers import Dense, Flatten
+# Carregar o conjunto de dados Fashion MNIST
+fashion_mnist = tf.keras.datasets.fashion_mnist
+(train_images, train_labels), (test_images,test_labels) = fashion_mnist.load_data()
+# Normalizar os dados de imagem
+train_images = train_images / 255.0
+test_images = test_images / 255.0
+
+# Construir o modelo de rede neural
+model = Sequential([
+Flatten(input_shape=(28, 28)), # Transformar a imagem 28x28 em um array 1D
+
+Dense(128, activation='relu'), # Uma camada densa com 128 neurônios
+
+Dense(10, activation='softmax') # Uma camada de saída com 10 neurônios, um para cada classe
+
+])
+
+# Compilar o modelo
+model.compile(optimizer='adam',
+loss='sparse_categorical_crossentropy',
+metrics=['accuracy'])
+
+# Treinar o modelo
+model.fit(train_images, train_labels, epochs=5)
+# Avaliar o desempenho do modelo
+test_loss, test_acc = model.evaluate(test_images,
+
+test_labels, verbose=2)
+
+print('\nAcurácia do teste:', test_acc)
