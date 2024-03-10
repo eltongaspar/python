@@ -1,0 +1,279 @@
+# 3.4 - Exercicio 
+
+#TensorFlow
+
+import datetime
+data_hora_atual_ini = datetime.datetime.now()
+print(" \n Inciio",data_hora_atual_ini)
+
+
+# Carregar bibliotecas
+
+import tensorflow as tf 
+#import: Esta palavra-chave é usada para importar módulos ou bibliotecas no Python.
+#tensorflow: É o nome da biblioteca que você deseja importar.
+#as tf: Esta parte é opcional e serve para atribuir um apelido ao módulo importado. Aqui, 
+#tf se torna um alias para tensorflow, tornando o código mais conciso ao usar funções e classes da biblioteca.
+
+from tensorflow.keras.datasets import mnist
+#tensorflow: Importa a biblioteca TensorFlow.
+#keras: Seleciona a API Keras dentro do TensorFlow (API de alto nível para redes neurais).
+#datasets: Acessa o submódulo datasets que contém funções para carregar datasets populares.
+#import mnist:
+#Importa a função mnist específica para carregar o dataset MNIST.
+#Ao executar esta linha, você habilita o uso das imagens e rótulos do dataset MNIST em seu código. 
+#O dataset MNIST consiste em imagens de dígitos manuscritos (de 0 a 9) e seus rótulos correspondentes.
+
+from tensorflow.keras.models import Sequential
+#models: Acessa o submódulo models que fornece classes para construir e gerenciar modelos de rede neural.
+#Sequential: Importa a classe específica Sequential usada para definir modelos como um sequenciamento de camadas.
+# A classe Sequential é fundamental para criar redes neurais sequenciais no TensorFlow.
+#O que é um modelo sequencial?
+#Uma rede neural sequencial é composta por camadas empilhadas uma após a outra. 
+#Cada camada recebe a saída da camada anterior como entrada e processa os dados. 
+#O Sequential permite definir esse fluxo sequencial de camadas de forma simples e organizada.
+
+from tensorflow.keras.layers import Dense, Flatten
+#Este código importa duas classes importantes usadas para construir camadas de rede neural 
+#na API Keras do TensorFlow:
+#1. Dense (Densa):
+#Esta classe representa uma camada densamente conectada, o tipo mais comum em redes neurais. 
+#Ela realiza uma multiplicação de matrizes entre os dados de entrada e uma matriz de pesos, 
+#seguida por uma adição de polarização opcional e função de ativação.
+#Características principais:
+#Aceita qualquer número de dimensões como entrada.
+#Por padrão, gera um vetor unidimensional como saída.
+#Frequentemente usada em camadas ocultas de redes neurais.
+
+#2. Flatten (Aplanar):
+#Esta classe reformula os dados de entrada em uma única dimensão. 
+#É particularmente útil ao transitar de camadas convolucionais 
+#(que normalmente geram tensores multidimensionais) para camadas densas 
+#(que esperam vetores de entrada unidimensionais).
+#Características principais:
+#Recebe um tensor com múltiplas dimensões como entrada.
+#Aprimora a entrada em uma única dimensão, preservando o número total de elementos.
+#Frequentemente usada após camadas convolucionais antes de alimentar dados para camadas densas.
+
+from tensorflow.keras.optimizers import Adam
+#O Otimizador Adam
+#O otimizador Adam é um algoritmo de otimização popular e eficiente para redes neurais. 
+#Significa "Adaptive Moment Estimation" (Estimação Adaptativa de Momento) 
+#e combina os benefícios de vários outros otimizadores, tornando-o uma boa escolha para diversos problemas.
+#Características principais do Adam:
+#Taxas de Aprendizado Adaptativas: O Adam usa estimativas de momentos de primeira e segunda ordem 
+#(média e variância) dos gradientes para ajustar taxas de aprendizado para cada parâmetro individualmente, 
+#levando a uma convergência mais rápida e otimização mais suave.
+#Momentum: Ele incorpora momentum, que considera a direção das atualizações passadas para acelerar 
+#o aprendizado na direção certa.
+#Sem Ajuste Manual: O Adam geralmente requer menos ajuste manual de hiperparâmetros em comparação 
+#com alguns outros otimizadores.
+
+#Carregamento do Dataset MNIST
+
+(mnist_train_images, mnist_train_labels), (mnist_test_images, mnist_test_labels) = mnist.load_data()
+ #A função load_data retorna quatro arrays NumPy:
+#mnist_train_images: Esta variável armazena as imagens de treinamento do dataset MNIST.
+#Essas imagens representam os dígitos escritos à mão que seu modelo deve aprender a reconhecer.
+#mnist_train_labels: Esta variável armazena os rótulos correspondentes às imagens de treinamento. 
+#Cada elemento neste array representa o dígito real (0-9) representado na imagem correspondente em mnist_train_images.
+#mnist_test_images: Esta variável armazena as imagens de teste do dataset MNIST. 
+#Essas imagens são usadas para avaliar o quão bem seu modelo treinado se generaliza a dados não vistos anteriormente.
+#mnist_test_labels: Similar a mnist_train_labels, esta variável armazena os rótulos correspondentes s imagens de teste.
+
+
+# Inspecionar a forma dos dados
+print("Forma dos dados de treino:", mnist_train_images.shape)
+print("Forma dos dados de teste:", mnist_test_images.shape)
+
+mnist_train_images, mnist_test_images = mnist_train_images / 255.0, mnist_test_images / 255.0
+#Realiza uma etapa crucial no pré-processamento do dataset MNIST para o seu modelo de reconhecimento 
+#de imagens no TensorFlow/Kera
+#Normalização dos Valores dos Pixels:
+#O dataset MNIST normalmente armazena os valores dos pixels das imagens na faixa de 0 (preto) a 255 (branco).
+#Redes neurais geralmente funcionam melhor com valores de dados normalizados em uma faixa menor. 
+#Isso melhora a estabilidade e convergência do treinamento.
+
+# Construir o modelo de rede neural
+model = Sequential([
+Flatten(input_shape=(28, 28)), # Camada de entrada (aplainamento da imagem 28x28)
+
+Dense(128, activation='relu'), # Camada oculta com 128 neurônios
+
+Dense(10, activation='softmax') # Camada de saída com 10 neurônios (um para cada dígito)
+
+])
+
+#Define um modelo de rede neural para o reconhecimento de dígitos escritos à mão usando TensorFlow/Keras. 
+#Vamos analisar cada parte:
+#1. Sequential:
+#Essa classe do TensorFlow/Keras permite construir um modelo sequencial, onde cada camada é conectada à seguinte.
+#2. Flatten(input_shape=(28, 28)):
+#Essa camada converte cada imagem de 28x28 pixels em um vetor de 784 elementos (28 x 28).
+#Isso é necessário para alimentar a próxima camada, que espera um vetor como entrada.
+#3. Dense(128, activation='relu'):
+#Essa camada define uma camada densa (totalmente conectada) com 128 neurônios.
+#Cada neurônio aplica a função de ativação ReLU (unidade linear retificada) para gerar sua saída.
+#4. Dense(10, activation='softmax'):
+#Essa camada define a camada de saída com 10 neurônios, um para cada dígito (0-9).
+#A função de ativação softmax é usada para converter os valores de saída em probabilidades.
+#Detalhes Adicionais:
+#O modelo possui três camadas: uma camada de entrada, uma camada oculta e uma camada de saída.
+#A camada oculta possui 128 neurônios, enquanto a camada de saída possui 10 neurônios.
+#A função de ativação ReLU é utilizada na camada oculta, enquanto a função de ativação softmax é utilizada na camada de saída.
+
+# Compilar o modelo
+model.compile(optimizer=Adam(),
+loss='sparse_categorical_crossentropy',
+metrics=['accuracy'])
+#Compilando o Modelo de Rede Neural em:
+#O código compila o modelo de rede neural que você definiu anteriormente para o reconhecimento de dígitos escritos à mão no TensorFlow/Keras. 
+#Vamos decompor o que cada parte faz:
+#1. model.compile():
+#Este método é usado para compilar o modelo, especificando parâmetros essenciais para o processo de treinamento.
+#2. optimizer=Adam()なのはなぜですか (optimizer=Adam()):
+#O otimizador (optimizer) é um algoritmo que iterativamente ajusta os pesos e polarizações da rede neural durante o treinamento. Ele minimiza a função de perda, que mede quão bem o modelo se comporta nos dados de treinamento.
+#Aqui, você está usando o otimizador Adam, que é uma escolha popular devido à sua eficiência e facilidade de uso.
+#3. loss='sparse_categorical_crossentropy':
+#A função de perda (loss) define a função que o modelo tenta minimizar durante o treinamento.
+#parse_categorical_crossentropy é uma função de perda comum para problemas de classificação multiclasse (neste caso, classificando dígitos de 0 a 9).
+#4. metrics=['accuracy']:
+#As métricas (metrics) são funções usadas para avaliar o desempenho do modelo durante o treinamento e a avaliação.
+#Você está especificando a métrica de 'accuracy', que mede a proporção de previsões corretas feitas pelo modelo.
+#Resumo da Compilação:
+#Este código configura o modelo para usar o otimizador Adam para minimizar a função de perda sparse_categorical_crossentropy e monitora a precisão durante o treinamento.
+
+
+# Treinar o modelo
+history_tf = model.fit(mnist_train_images, mnist_train_labels,epochs=5,validation_split=0.2)
+#O código  inicia o processo de treinamento do seu modelo de rede neural para reconhecimento de dígitos escritos à mão no TensorFlow/Keras.
+#1. model.fit():
+#Esse método é responsável por treinar o modelo. Ele recebe os dados de treinamento como entrada e iterativamente ajusta os pesos e polarizações da rede para minimizar a função de perda especificada durante a compilação.
+#2. mnist_train_images:
+#Esta variável armazena as imagens de treinamento do dataset MNIST, que o modelo usará para aprender a reconhecer dígitos.
+#3. mnist_train_labels:
+#Esta variável armazena os rótulos correspondentes às imagens de treinamento. Cada elemento representa o dígito real (0-9) presente na imagem correspondente em mnist_train_images.
+#4. epochs=5:
+#A opção epochs define o número de vezes que o modelo passará por todo o conjunto de dados de treinamento.
+#No caso, você está configurando o modelo para treinar por 5 épocas. Durante cada época, o modelo verá todas as imagens e rótulos de treinamento uma vez.
+#O que Acontece Durante o Treinamento:
+#O modelo processa as imagens de treinamento, uma por vez, e tenta prever os dígitos correspondentes.
+#A função de perda calcula a diferença entre as previsões do modelo e os rótulos reais.
+#O otimizador (Adam, neste caso) usa a função de perda para ajustar os pesos e polarizações da rede neural para minimizar o erro nas previsões.
+#Esse processo se repete para todas as imagens de treinamento ao longo de todas as épocas especificadas.
+#Após o Treinamento:
+#Espera-se que o modelo tenha aprendido a reconhecer os dígitos escritos à mão com base nos dados de treinamento.
+#É importante ressaltar que o número ideal de épocas pode variar dependendo da complexidade do modelo e do tamanho do dataset. Você pode experimentar com diferentes valores de epochs para otimizar o desempenho do modelo.
+#O argumento validation_split no método fit do TensorFlow/Keras é uma maneira conveniente de separar automaticamente uma parte do seu conjunto de treinamento original para validação durante o processo de treinamento do seu modelo
+
+# Avaliar o modelo
+test_loss, test_accuracy = model.evaluate(mnist_test_images, mnist_test_labels)
+print('Acurácia no conjunto de teste:', test_accuracy)
+#O código avalia o desempenho do seu modelo treinado para reconhecimento de dígitos escritos à mão no TensorFlow/Keras.
+#1. model.evaluate():
+#Esse método avalia o modelo em um determinado conjunto de dados de entrada (imagens) e seus rótulos correspondentes.
+#Ele retorna duas métricas principais: perda e métricas especificadas durante a compilação (neste caso, acurácia).
+#2. mnist_test_images, mnist_test_labels:
+#Estas variáveis fornecem as imagens de teste e seus rótulos correspondentes do dataset MNIST.
+#O modelo nunca viu esses dados antes durante o treinamento.
+#3. test_loss, test_accuracy:
+#test_loss armazena o valor da função de perda (sparse_categorical_crossentropy) no conjunto de teste.
+#test_accuracy armazena a precisão do modelo no conjunto de teste. A precisão representa a proporção de previsões corretas feitas pelo modelo.
+#4. print('Acurácia no conjunto de teste:', test_accuracy):
+#Este comando imprime a precisão do modelo no conjunto de teste para que você possa avaliar o seu desempenho.
+#Interpretação da Avaliação:
+#Uma alta precisão no conjunto de teste indica que o modelo generalizou bem e pode reconhecer dígitos escritos à mão com boa precisão, mesmo em dados que nunca viu antes.
+#Uma baixa precisão pode sugerir que o modelo está superajustado aos dados de treinamento e não generaliza bem para dados não vistos.
+#O que Fazer Depois da Avaliação:
+#Dependendo da precisão obtida, você pode:
+#Ficar satisfeito: Se a precisão for alta o suficiente para o seu caso de uso, você pode prosseguir para usar o modelo para fazer previsões em novos dados.
+#Ajustar o Modelo: Se a precisão for baixa, você pode tentar ajustar o modelo (por exemplo, alterando o número de camadas/neurônios, experimentando diferentes otimizadores ou técnicas de regularização) para melhorar o desempenho.
+#Coletar Mais Dados: Em alguns casos, a falta de dados de treinamento pode limitar o desempenho do modelo. Coletar mais dados de treinamento representativos pode ser benéfico.
+#Conclusão:
+#A etapa de avaliação é crucial para entender o quão bem seu modelo generaliza para dados não vistos. Este código fornece uma maneira de avaliar a precisão do seu modelo treinado usando o conjunto de teste MNIST.
+#Dicas Adicionais:
+#É recomendável separar uma parte do seu conjunto de treinamento como dados de validação para avaliar o modelo durante o treinamento e evitar o superajuste.
+#Explore diferentes métricas de avaliação além da precisão, dependendo do seu problema específico.
+
+
+# Histórico de treinamento do TensorFlow
+acc_tf = history_tf.history['accuracy']
+val_acc_tf = history_tf.history['val_accuracy']
+loss_tf = history_tf.history['loss']
+val_loss_tf = history_tf.history['val_loss']
+
+print("Acurácia de Treinamento TensorFlow: ", acc_tf[-1])
+print("Acurácia de Validação TensorFlow: ", val_acc_tf[-1])
+print("Perda de Treinamento TensorFlow: ", loss_tf[-1])
+print("Perda de Validação TensorFlow: ", val_loss_tf[-1])
+
+#1. history_tf:
+#Esta variável provavelmente armazena o histórico de treinamento retornado pelo método fit do seu modelo.
+#Durante o treinamento, o modelo registra informações sobre o desempenho em cada época, incluindo métricas como precisão (accuracy) e perda (loss).
+#2. history_tf.history:
+#Esta é uma propriedade do objeto history_tf que contém um dicionário com as métricas registradas durante o treinamento.
+#3. acc_tf = history_tf.history['accuracy']:
+#Esta linha de código extrai a lista de valores de precisão do treinamento (accuracy) do dicionário history_tf.history.
+#Cada elemento na lista acc_tf corresponde à precisão do modelo em uma determinada época de treinamento.
+#4. val_acc_tf = history_split.history['val_accuracy']:
+#Similar à linha anterior, mas extrai a lista de valores de precisão de validação (val_accuracy) do dicionário de histórico.
+#A precisão de validação é calculada em um conjunto de validação separado (se você usou validation_split durante o treinamento) ou no conjunto de validação fornecido manualmente.
+#5. loss_tf = history_tf.history['loss'] e val_loss_tf = history_tf.history['val_loss']:
+#Essas linhas extraem as listas de valores de perda de treinamento (loss) e perda de validação (val_loss) do dicionário de histórico, respectivamente.
+#A perda representa o quão bem o modelo está se saindo em cada época e é minimizada durante o treinamento.
+
+
+
+#Exibir Resultados
+import matplotlib.pyplot as plt
+
+# TensorFlow - Acurácia e Perda
+plt.figure(figsize=(12, 5))
+
+plt.subplot(1, 2, 1)
+plt.plot(history_tf.history['accuracy'], label='Acurácia de Treino (TensorFlow)')
+plt.plot(history_tf.history['val_accuracy'], label='Acurácia de Validação (TensorFlow)')
+plt.title('Acurácia ao longo das Épocas (TensorFlow)')
+plt.xlabel('Épocas')
+plt.ylabel('Acurácia')
+plt.legend()
+
+plt.subplot(1, 2, 2)
+plt.plot(history_tf.history['loss'], label='Perda de Treino (TensorFlow)')
+plt.plot(history_tf.history['val_loss'], label='Perda de Validação (TensorFlow)')
+plt.title('Perda ao longo das Épocas (TensorFlow)')
+plt.xlabel('Épocas')
+plt.ylabel('Perda')
+plt.legend()
+
+plt.show()
+
+
+
+#Exibir perdas ao longo do teste/treino
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+from sklearn.metrics import confusion_matrix
+import tensorflow as tf
+
+# Previsões com o modelo TensorFlow
+predictions_tf = model.predict(mnist_test_images)
+predicted_labels_tf = np.argmax(predictions_tf, axis=1)
+
+# Matriz de confusão
+conf_matrix_tf = confusion_matrix(mnist_test_labels, predicted_labels_tf)
+
+# Visualização com Seaborn
+plt.figure(figsize=(10, 8))
+sns.heatmap(conf_matrix_tf, annot=True, fmt='g', cmap='Blues')
+plt.xlabel('Etiquetas Previstas')
+plt.ylabel('Etiquetas Verdadeiras')
+plt.title('Matriz de Confusão para o Modelo TensorFlow')
+plt.show()
+
+
+data_hora_atual_fim = datetime.datetime.now()
+print("\n Fim",data_hora_atual_fim)
+tempo = data_hora_atual_fim - data_hora_atual_ini
+print('\n Tempo',tempo)
