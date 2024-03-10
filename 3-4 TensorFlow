@@ -98,9 +98,9 @@ mnist_train_images, mnist_test_images = mnist_train_images / 255.0, mnist_test_i
 model = Sequential([
 Flatten(input_shape=(28, 28)), # Camada de entrada (aplainamento da imagem 28x28)
 
-Dense(128, activation='relu'), # Camada oculta com 128 neurônios
+Dense(11128, activation='relu'), # Camada oculta com 128 neurônios
 
-Dense(10, activation='softmax') # Camada de saída com 10 neurônios (um para cada dígito)
+Dense(100, activation='softmax') # Camada de saída com 10 neurônios (um para cada dígito)
 
 ])
 
@@ -145,7 +145,7 @@ metrics=['accuracy'])
 
 
 # Treinar o modelo
-history_tf = model.fit(mnist_train_images, mnist_train_labels,epochs=5,validation_split=0.2)
+history_tf = model.fit(mnist_train_images, mnist_train_labels,epochs=100,validation_split=0.2)
 #O código  inicia o processo de treinamento do seu modelo de rede neural para reconhecimento de dígitos escritos à mão no TensorFlow/Keras.
 #1. model.fit():
 #Esse método é responsável por treinar o modelo. Ele recebe os dados de treinamento como entrada e iterativamente ajusta os pesos e polarizações da rede para minimizar a função de perda especificada durante a compilação.
@@ -260,9 +260,45 @@ import tensorflow as tf
 # Previsões com o modelo TensorFlow
 predictions_tf = model.predict(mnist_test_images)
 predicted_labels_tf = np.argmax(predictions_tf, axis=1)
+#Previsões com o modelo TensorFlow
+#O código fornecido realiza previsões em seu modelo TensorFlow usando as imagens de teste (mnist_test_images). Vamos detalhar o que cada linha faz:
+#predictions_tf = model.predict(mnist_test_images):
+#Esta linha chama o método predict do seu modelo TensorFlow treinado (model).
+#O método predict recebe as imagens de teste (mnist_test_images) como entrada.
+#A saída de predict é armazenada na variável predictions_tf.
+#predicted_labels_tf = np.argmax(predictions_tf, axis=1):
+#Esta linha processa as previsões brutas do modelo (predictions_tf).
+#predictions_tf provavelmente contém uma matriz de probabilidades para cada classe (dígito de 0 a 9) para cada imagem de teste.
+#A função np.argmax da biblioteca NumPy é usada para encontrar o índice da maior probabilidade em cada linha de predictions_tf. Isso essencialmente identifica a classe prevista (dígito) para cada imagem de teste com base na maior probabilidade.
+#O resultado é armazenado na variável predicted_labels_tf, que provavelmente é uma matriz NumPy contendo os rótulos dos dígitos previstos para cada imagem de teste.
+#Resumindo, este código usa seu modelo TensorFlow treinado para prever os rótulos dos dígitos para as imagens de teste e armazena os rótulos previstos em uma matriz separada para análise posterior. Você pode usar esses rótulos previstos para calcular métricas como precisão, matriz de confusão ou visualizá-los para entender o quão bem seu modelo se comporta em dados não vistos anteriormente.
+
 
 # Matriz de confusão
 conf_matrix_tf = confusion_matrix(mnist_test_labels, predicted_labels_tf)
+#O código calcula a matriz de confusão para avaliar o desempenho do seu modelo treinado de reconhecimento de dígitos escritos à mão. Vamos analisar o que cada parte significa:
+#1. confusion_matrix:
+#Esta função, importada da biblioteca sklearn.metrics, calcula a matriz de confusão.
+#2. mnist_test_labels:
+#Esta variável armazena os rótulos reais (dígitos corretos de 0 a 9) das imagens de teste do MNIST.
+#3. predicted_labels_tf:
+#Esta variável, obtida no código anterior, contém os rótulos previstos pelo seu modelo TensorFlow para cada imagem de teste.
+#4. conf_matrix_tf:
+#Esta variável armazena o resultado do cálculo da matriz de confusão. A matriz de confusão é uma tabela que mostra:
+#O número de previsões corretas para cada dígito (na diagonal principal).
+#O número de previsões incorretas para cada dígito (fora da diagonal principal).
+#Por exemplo, se conf_matrix_tf[2, 3] tiver o valor 10, significa que o modelo previu incorretamente 10 imagens que eram realmente o dígito 3 como sendo o dígito 2.
+#Interpretação da Matriz de Confusão:
+#A matriz de confusão fornece uma visão geral do desempenho do seu modelo em diferentes classes.
+#Uma alta diagonal principal indica um bom desempenho do modelo, pois significa que a maioria das previsões foram corretas.
+#Valores altos fora da diagonal principal indicam erros de classificação do modelo para classes específicas.
+#O que Fazer Depois de Calcular a Matriz de Confusão:
+#Você pode usar a matriz de confusão para calcular métricas de desempenho do modelo, como precisão (accuracy), recall e F1-score.
+#Pode analisar quais dígitos o modelo está confundindo com mais frequência para identificar possíveis áreas de melhoria.
+#É possível visualizar a matriz de confusão usando bibliotecas como seaborn para uma interpretação mais intuitiva.
+#Conclusão:
+#A matriz de confusão é uma ferramenta valiosa para avaliar o desempenho de modelos de classificação, como o seu modelo de reconhecimento de dígitos escritos à mão. O código fornecido calcula essa matriz para que você possa analisar e interpretar os resultados do seu modelo.
+
 
 # Visualização com Seaborn
 plt.figure(figsize=(10, 8))
