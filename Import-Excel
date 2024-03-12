@@ -1,0 +1,75 @@
+import pandas as pd 
+# Ler o arquivo Excel
+dataframe = pd.read_excel('D:\Dados\Extrato_20210101_20241231-Full.xlsx')
+data = pd.read_excel('D:\Dados\Extrato_20210101_20241231-Full.xlsx')
+
+#Lista valores positivos 
+#valcred = dataframe[dataframe['Valor'] > 0]
+
+#Lista valores negativos 
+#valdeb = dataframe[dataframe['Valor'] > 0]
+
+#Exibe Cabeçalhos
+#column_headers = list(dataframe.columns)
+
+
+# Exibir os dados
+#Exibe Cabeçaçhos
+#print(column_headers)
+#print("The Column Header :", data.columns.ravel())
+
+#Exibe dados da coluna 
+#print("Dados da coluna :", data['Categoria'].tolist())
+
+#Exibe Dados Completos
+#print(dataframe)
+#Exibe dados de um rotulo / coluna
+#print(dataframe.loc[2])
+#Exibe Valores positivos 
+#print(valcred)
+#Exibe valores negativos
+#print(valdeb)
+
+#Operações 
+#Soma
+#dataframe['Valor'].sum()
+#Media
+#dataframe['Valor'].mean()
+#Desvio Padrao
+#dataframe['Valor'].std()
+
+#Graficos
+#Diagramas
+#dataframe.plot()
+#Dispersão 
+#dataframe.plot(kind = 'scatter', x = 'Valor', y = 'Conta')
+#Historgrama
+#dataframe["Valor"].plot(kind = 'hist')
+
+#Soma com agrupamento 
+#Categoria = dataframe[['Categoria','Valor']].groupby(['Categoria']).sum()
+#print(Categoria)
+#Diagramas
+#ContaCat.plot()
+
+#Conta = dataframe[['Conta','Valor']].groupby(['Conta']).sum()
+#print(Conta)
+
+#ContaCat = dataframe[['Conta','Categoria','Valor']].groupby(['Conta','Categoria']).sum()
+#print(ContaCat)
+
+#Resumo estatístico do DataFrame, com quartis, mediana, etc
+#dataframe.describe()
+#Mediana dos valores
+#dataframe['Valor'].mean()
+#Média dos valores
+#dataframe['Valor'].median()
+
+#Ordenando em ordem crescente
+dataframe['Valor'].sort_values()
+#Ordenando em ordem decrescente
+dataframe['Valor'].sort_values(ascending=False)
+
+
+#Aplicando uma função que substitui a por b
+df.apply(lambda x: x.replace('a', 'b'))
