@@ -1,0 +1,60 @@
+# 3.4 - Exercicio - Excel 
+
+#TensorFlow
+
+#Imprimir Dara Hora Inicio 
+import datetime
+data_hora_atual_ini = datetime.datetime.now()
+print(" \n Inicio",data_hora_atual_ini)
+#Fim 
+
+##Importar as bibliotecas
+import pandas as pd
+import tensorflow as tf
+
+from tensorflow.keras.datasets import mnist
+from tensorflow.keras.models import Sequential
+from tensorflow.keras.layers import Dense, Flatten
+from tensorflow.keras.optimizers import Adam
+from sklearn.preprocessing import OneHotEncoder
+from sklearn.preprocessing import StandardScaler
+from sklearn.model_selection import train_test_split
+
+# Carregar os dados do Excel
+arq = 'D:/Dados/Modelo FinTech.xlsx'
+dados = pd.read_excel(arq)
+
+#Preprocessamento 
+# Converter colunas específicas para o tipo numérico
+dados['Valor'] = pd.to_numeric(dados['Valor'], errors='coerce')  # Tratar erros
+dados['Data Ocorrência'] = pd.to_datetime(dados['Data Ocorrência'], format='%d/%m/%Y',errors='coerce')  # Tratar erros
+
+
+#One-Hot Encoding: Cria uma nova coluna binária para cada categoria (por exemplo,
+# Codificar a coluna categórica usando One-Hot Encoding
+dados_onehot = pd.DataFrame(OneHotEncoder(sparse_output=False).fit_transform(dados[['Categoria','Conta','Categoria','Categoria Master']]))
+# Concatenar as colunas codificadas ao DataFrame original
+#dados = pd.concat([dados, dados_onehot], axis=1)
+
+#Normalização/Padronização de dados numéricos
+scaler = StandardScaler()
+dados['Valor'] = scaler.fit_transform(dados[['Valor']])
+
+#Divisão dos dados em conjuntos de treinamento e teste
+#Divisão aleatória (70% para treinamento, 30% para teste)
+X_train, X_test, y_train, y_test = train_test_split(dados.drop('Valor', axis=1), dados['Valor'], test_size=0.3)
+#print(X_train,X_test,y_train,y_test)
+
+
+#Exibe Dados Completos do Dataframe
+#print(dados)
+#print(dados.dtypes) #verifica tipos de dados da dateframe
+#column_headers = list(dados.columns) ##Exibe Cabeçalhos
+#print(column_headers)
+
+#Imprimir Data Hora Fim e Tempo 
+data_hora_atual_fim = datetime.datetime.now()
+print("\n Fim",data_hora_atual_fim)
+tempo = data_hora_atual_fim - data_hora_atual_ini
+print('\n Tempo',tempo)
+#Fim 
