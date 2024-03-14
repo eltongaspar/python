@@ -21,29 +21,40 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.model_selection import train_test_split
 
 # Carregar os dados do Excel
-arq = 'D:/Dados/Modelo FinTech.xlsx'
+arq = 'D:/Dados/Fintech/Modelo FinTech.xlsx'
 dados = pd.read_excel(arq)
+data = 'Data Ocorrência'
+desc = 'Descrição'
+val = 'Valor'
+cat = 'Categoria'
+conta = 'Conta'
+cat_master = 'Categoria Master'
+
+
+#Exibe Cabeçalhos
+#column_headers = list(dataframe.columns)
+#print(column_headers)
 
 #Preprocessamento 
 # Converter colunas específicas para o tipo numérico
-dados['Valor'] = pd.to_numeric(dados['Valor'], errors='coerce')  # Tratar erros
-dados['Data Ocorrência'] = pd.to_datetime(dados['Data Ocorrência'], format='%d/%m/%Y',errors='coerce')  # Tratar erros
+dados[val] = pd.to_numeric(dados[val], errors='coerce')  # Tratar erros
+dados[data] = pd.to_datetime(dados[data], format='%d/%m/%Y',errors='coerce')  # Tratar erros
 
 
 #One-Hot Encoding: Cria uma nova coluna binária para cada categoria (por exemplo,
 # Codificar a coluna categórica usando One-Hot Encoding
-dados_onehot = pd.DataFrame(OneHotEncoder(sparse_output=False).fit_transform(dados[['Categoria','Conta','Categoria','Categoria Master']]))
+dados_onehot = pd.DataFrame(OneHotEncoder(sparse_output=False).fit_transform(dados[[cat,cat_master,desc,data,conta]]))
 # Concatenar as colunas codificadas ao DataFrame original
 #dados = pd.concat([dados, dados_onehot], axis=1)
 
 #Normalização/Padronização de dados numéricos
 scaler = StandardScaler()
-dados['Valor'] = scaler.fit_transform(dados[['Valor']])
+dados[val] = scaler.fit_transform(dados[[val]])
 
 #Divisão dos dados em conjuntos de treinamento e teste
 #Divisão aleatória (70% para treinamento, 30% para teste)
-X_train, X_test, y_train, y_test = train_test_split(dados.drop('Valor', axis=1), dados['Valor'], test_size=0.3)
-#print(X_train,X_test,y_train,y_test)
+X_train, X_test, y_train, y_test = train_test_split(dados.drop(val, axis=1), dados[cat], test_size=0.3)
+print(X_train,X_test,y_train,y_test)
 
 
 #Exibe Dados Completos do Dataframe
