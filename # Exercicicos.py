@@ -1434,6 +1434,379 @@ axs[1,1].set_ylabel("Eyxo Y Numeros ")
 #plt.grid(True)
 
 
+#58 - Deixar imagem em colorida em preto e branco
+
+# Importar as bibliotecas necessárias
+import cv2 # OpenCV para processamento de imagens
+from matplotlib import pyplot as plt # Matplotlib para
+#exibição de imagens
+#from google.colab import files # Módulo do Google Colab
+#para upload de arquivos
+
+# Fazer o upload da imagem
+#uploaded = files.upload() # Abre um prompt de upload
+#de arquivo para carregar uma imagem do seu computador
+#image_name = next(iter(uploaded)) # Obtém o nome do arquivo carregado
+
+image_name = 'D:/Diffusor/Imagens AI/Imagem/paisagem.jpeg'
+
+# Carregar a imagem
+imagem = cv2.imread(image_name) # Lê o arquivo de
+#imagem para uma variável usando o OpenCV
+
+# Converter a imagem para escala de cinza
+imagem_cinza = cv2.cvtColor(imagem, cv2.COLOR_BGR2GRAY)
+# Converte a imagem de BGR (Blue, Green, Red) para escala de cinza
+
+
+# Exibir a imagem original e a imagem em escala de cinza
+
+plt.figure(figsize=(10, 5)) # Define o tamanho da figura
+
+#plt.subplot() para criar uma grade de subplot com uma linha e duas colunas.
+
+plt.subplot(1, 2, 1) #cria o primeiro subplot na primeira posição da grade.
+plt.imshow(cv2.cvtColor(imagem,cv2.COLOR_BGR2RGB)) # exibe a imagem original convertida de BGR
+plt.title('Imagem Original') #define o título para o primeiro subplot.
+plt.axis('off') #remove os eixos do primeiro subplot.
+plt.subplot(1, 2, 2) #cria o segundo subplot na segunda posição da grade.
+plt.imshow(imagem_cinza, cmap='gray') #exibe a imagem em escala de cinza.
+plt.title('Imagem em Escala de Cinza') #define o título para o segundo subplot.
+plt.axis('off') #remove os eixos do segundo subplot.
+
+plt.show() # Exibe a figura com os subplots
+
+
+#59 - classificadores haarcascade para detectar relógios em imagens.
+
+#Haar Cascade é um algoritmo de detecção de objetos desenvolvido por Paul Viola e Michael Jones em 2001. Ele é amplamente utilizado para detecção de objetos em imagens, especialmente em aplicações de visão computacional, como detecção de rostos, detecção de olhos, detecção de sorrisos, entre outros.
+#O Haar Cascade baseia-se em características visuais locais chamadas Haar-like features, que são padrões de intensidade de pixel. Essas características são usadas para treinar um classificador, geralmente baseado em técnicas de aprendizado de máquina, como o classificador AdaBoost.
+#Para usar o Haar Cascade em Python com OpenCV, você precisa de arquivos XML que contêm os classificadores pré-treinados para diferentes objetos. Por exemplo, o arquivo "haarcascade_frontalface_default.xml" é comumente usado para detecção de rostos.
+
+import cv2
+
+# Carrega o classificador pré-treinado para detecção de relógios
+arq_modelo = 'D:/Dados/Material_complementar_reconhecimento_facial/cascades/relogios.xml'
+relogio_cascade = cv2.CascadeClassifier(arq_modelo)
+
+#Carrega a imagem 
+imagem = cv2.imread('D:/Dados/Material_complementar_reconhecimento_facial/outros/relogios4.jpg')
+
+#Converter a imagemem cinza
+imagem_cinza = cv2.cvtColor(imagem,cv2.COLOR_BGR2GRAY)
+
+# Detecta relógios na imagem
+relogios = relogio_cascade.detectMultiScale(imagem_cinza, scaleFactor=1.1, minNeighbors=5, minSize=(30, 30))
+
+
+#Desenha retângulos ao redor dos relógios detectados
+for (x, y, w, h) in relogios:
+    cv2.rectangle(imagem, (x, y), (x+w, y+h), (0, 255, 0), 2)
+
+# Exibe a imagem com os relógios detectados
+cv2.imshow('Detecção de Relógios', imagem)
+cv2.waitKey(0)
+cv2.destroyAllWindows()
+
+
+#temp
+
+#60 - classificadores haarcascade para detectar gatos em imagens.
+
+#Haar Cascade é um algoritmo de detecção de objetos desenvolvido por Paul Viola e Michael Jones em 2001. Ele é amplamente utilizado para detecção de objetos em imagens, especialmente em aplicações de visão computacional, como detecção de rostos, detecção de olhos, detecção de sorrisos, entre outros.
+#O Haar Cascade baseia-se em características visuais locais chamadas Haar-like features, que são padrões de intensidade de pixel. Essas características são usadas para treinar um classificador, geralmente baseado em técnicas de aprendizado de máquina, como o classificador AdaBoost.
+#Para usar o Haar Cascade em Python com OpenCV, você precisa de arquivos XML que contêm os classificadores pré-treinados para diferentes objetos. Por exemplo, o arquivo "haarcascade_frontalface_default.xml" é comumente usado para detecção de rostos.
+
+import cv2
+import os #listar diretorio
+import time
+
+# Carrega o classificador pré-treinado para detecção de gatos
+arq_modelo = 'D:/Dados/Material_complementar_reconhecimento_facial/cascades/gatos.xml'
+gatos_cascade = cv2.CascadeClassifier(arq_modelo)
+
+#Carrega a imagem 
+imagem = cv2.imread('D:/Dados/Material_complementar_reconhecimento_facial/outros/gatos1.jpg')
+
+
+#Converter a imagemem cinza
+imagem_cinza = cv2.cvtColor(imagem,cv2.COLOR_BGR2GRAY)
+
+# Detecta gatos na imagem
+gatos = gatos_cascade.detectMultiScale(imagem_cinza, scaleFactor=1.1, minNeighbors=5, minSize=(30, 30))
+
+
+#Desenha retângulos ao redor dos gatos detectados
+for (x, y, w, h) in gatos:
+    cv2.rectangle(imagem, (x, y), (x+w, y+h), (0, 255, 0), 2)
+
+# Exibe a imagem com os gatos detectados
+cv2.imshow('Detecção de Gatos', imagem)
+cv2.waitKey(0)
+cv2.destroyAllWindows()
+
+#Modo diretorio 
+#defindo diretorio
+dir = 'D:\Dados\Material_complementar_reconhecimento_facial\outros'
+
+# Listando diretorio 
+files = os.listdir(dir)
+#Contagem de arquivos 
+num_files = len(files)
+
+print(f'Listando, contando e exibindo arquivos')
+print(f'Diretorio',dir)
+print(f'Total Arquivos:',num_files)
+time.sleep(5)
+
+# Loop sobre cada arquivo no diretório
+for num_files in files:
+    # Verifica se o arquivo é uma imagem
+    if num_files.endswith('.jpg') or num_files.endswith('.png'):
+        # Carrega a imagem
+        imagem = cv2.imread(os.path.join(dir, num_files))
+        # Converte a imagem para escala de cinza
+        imagem_cinza = cv2.cvtColor(imagem, cv2.COLOR_BGR2GRAY)
+        # Detecta gatos na imagem
+        gatos = gatos_cascade.detectMultiScale(imagem_cinza, scaleFactor=1.1, minNeighbors=5, minSize=(30, 30))
+        # Desenha retângulos ao redor dos gatos detectados
+        for (x, y, w, h) in gatos:
+            cv2.rectangle(imagem, (x, y), (x+w, y+h), (255, 0, 0), 2)
+        # Exibe a imagem com os gatos detectados
+        cv2.imshow('Gatos Detectados', imagem)
+        cv2.waitKey(0)
+
+
+# Variável para controlar se pelo menos um gato foi detectado
+gatos_detectados = False
+
+# Loop sobre cada arquivo no diretório
+for num_files in files:
+    # Verifica se o arquivo é uma imagem
+    if num_files.endswith('.jpg') or num_files.endswith('.png'):
+        # Carrega a imagem
+        imagem = cv2.imread(os.path.join(dir, num_files))
+        # Converte a imagem para escala de cinza
+        imagem_cinza = cv2.cvtColor(imagem, cv2.COLOR_BGR2GRAY)
+        # Detecta gatos na imagem
+        gatos = gatos_cascade.detectMultiScale(imagem_cinza, scaleFactor=1.1, minNeighbors=5, minSize=(30, 30))
+        
+        # Se pelo menos um gato for detectado
+        if len(gatos) > 0:
+            # Define a variável para indicar que gatos foram detectados
+            gatos_detectados = True
+                # Desenha retângulos ao redor dos gatos detectados
+            for (x, y, w, h) in gatos:
+                cv2.rectangle(imagem, (x, y), (x+w, y+h), (255, 0, 0), 2)
+                # Exibe a imagem com os gatos detectados
+                cv2.imshow('Gatos Detectados', imagem)
+                cv2.waitKey(0)
+
+# Se nenhum gato foi detectado
+if not gatos_detectados:
+    print("Nenhum gato detectado.")
+
+
+cv2.destroyAllWindows()
+
+
+#61 - classificadores haarcascade para detectar carros em imagens.
+
+#Haar Cascade é um algoritmo de detecção de objetos desenvolvido por Paul Viola e Michael Jones em 2001. Ele é amplamente utilizado para detecção de objetos em imagens, especialmente em aplicações de visão computacional, como detecção de rostos, detecção de olhos, detecção de sorrisos, entre outros.
+#O Haar Cascade baseia-se em características visuais locais chamadas Haar-like features, que são padrões de intensidade de pixel. Essas características são usadas para treinar um classificador, geralmente baseado em técnicas de aprendizado de máquina, como o classificador AdaBoost.
+#Para usar o Haar Cascade em Python com OpenCV, você precisa de arquivos XML que contêm os classificadores pré-treinados para diferentes objetos. Por exemplo, o arquivo "haarcascade_frontalface_default.xml" é comumente usado para detecção de rostos.
+
+import cv2
+import os #listar diretorio
+import time
+
+# Carrega o classificador pré-treinado para detecção de carros
+arq_modelo = 'D:/Dados/Material_complementar_reconhecimento_facial/cascades/carros.xml'
+carros_cascade = cv2.CascadeClassifier(arq_modelo)
+
+#Carrega a imagem 
+imagem = cv2.imread('D:/Dados/Material_complementar_reconhecimento_facial/outros/carros1.jpg')
+
+
+#Converter a imagemem cinza
+imagem_cinza = cv2.cvtColor(imagem,cv2.COLOR_BGR2GRAY)
+
+# Detecta carros na imagem
+carros = carros_cascade.detectMultiScale(imagem_cinza, scaleFactor=1.1, minNeighbors=5, minSize=(30, 30))
+
+
+#Desenha retângulos ao redor dos carros detectados
+for (x, y, w, h) in carros:
+    cv2.rectangle(imagem, (x, y), (x+w, y+h), (0, 255, 0), 2)
+
+# Exibe a imagem com os carros detectados
+cv2.imshow('Detecção de Carros', imagem)
+cv2.waitKey(0)
+cv2.destroyAllWindows()
+
+#Modo diretorio 
+#defindo diretorio
+dir = 'D:\Dados\Material_complementar_reconhecimento_facial\outros'
+
+# Listando diretorio 
+files = os.listdir(dir)
+#Contagem de arquivos 
+num_files = len(files)
+
+print(f'Listando, contando e exibindo arquivos')
+print(f'Diretorio',dir)
+print(f'Total Arquivos:',num_files)
+time.sleep(5)
+
+# Loop sobre cada arquivo no diretório
+for num_files in files:
+    # Verifica se o arquivo é uma imagem
+    if num_files.endswith('.jpg') or num_files.endswith('.png'):
+        # Carrega a imagem
+        imagem = cv2.imread(os.path.join(dir, num_files))
+        # Converte a imagem para escala de cinza
+        imagem_cinza = cv2.cvtColor(imagem, cv2.COLOR_BGR2GRAY)
+        # Detecta carros na imagem
+        carros = carros_cascade.detectMultiScale(imagem_cinza, scaleFactor=1.1, minNeighbors=5, minSize=(30, 30))
+        # Desenha retângulos ao redor dos carros detectados
+        for (x, y, w, h) in carros:
+            cv2.rectangle(imagem, (x, y), (x+w, y+h), (255, 0, 0), 2)
+        # Exibe a imagem com os carros detectados
+        cv2.imshow('Carros Detectados', imagem)
+        cv2.waitKey(0)
+
+
+# Variável para controlar se pelo menos um carro foi detectado
+carros_detectados = False
+
+# Loop sobre cada arquivo no diretório
+for num_files in files:
+    # Verifica se o arquivo é uma imagem
+    if num_files.endswith('.jpg') or num_files.endswith('.png'):
+        # Carrega a imagem
+        imagem = cv2.imread(os.path.join(dir, num_files))
+        # Converte a imagem para escala de cinza
+        imagem_cinza = cv2.cvtColor(imagem, cv2.COLOR_BGR2GRAY)
+        # Detecta carros na imagem
+        carros = carros_cascade.detectMultiScale(imagem_cinza, scaleFactor=1.1, minNeighbors=5, minSize=(30, 30))
+        
+        # Se pelo menos um carro for detectado
+        if len(carros) > 0:
+            # Define a variável para indicar que carros foram detectados
+            carros_detectados = True
+                # Desenha retângulos ao redor dos carros detectados
+            for (x, y, w, h) in carros:
+                cv2.rectangle(imagem, (x, y), (x+w, y+h), (255, 0, 0), 2)
+                # Exibe a imagem com os carros detectados
+                cv2.imshow('Carros Detectados', imagem)
+                cv2.waitKey(0)
+
+# Se nenhum carro foi detectado
+if not carros_detectados:
+    print("Nenhum carro detectado.")
+
+
+cv2.destroyAllWindows()
+
+#61 - classificadores haarcascade para detectar face em imagens.
+
+#Haar Cascade é um algoritmo de detecção de objetos desenvolvido por Paul Viola e Michael Jones em 2001. Ele é amplamente utilizado para detecção de objetos em imagens, especialmente em aplicações de visão computacional, como detecção de rostos, detecção de olhos, detecção de sorrisos, entre outros.
+#O Haar Cascade baseia-se em características visuais locais chamadas Haar-like features, que são padrões de intensidade de pixel. Essas características são usadas para treinar um classificador, geralmente baseado em técnicas de aprendizado de máquina, como o classificador AdaBoost.
+#Para usar o Haar Cascade em Python com OpenCV, você precisa de arquivos XML que contêm os classificadores pré-treinados para diferentes objetos. Por exemplo, o arquivo "haarcascade_frontalface_default.xml" é comumente usado para detecção de rostos.
+
+import cv2
+import os #listar diretorio
+import time
+
+# Carrega o classificador pré-treinado para detecção de face
+arq_modelo = 'D:/Dados/Material_complementar_reconhecimento_facial/cascades/haarcascade_frontalface_default.xml'
+faces_cascade = cv2.CascadeClassifier(arq_modelo)
+
+#Carrega a imagem 
+imagem = cv2.imread('D:/Dados/Material_complementar_reconhecimento_facial/pessoas/pessoas1.jpg')
+
+
+#Converter a imagemem cinza
+imagem_cinza = cv2.cvtColor(imagem,cv2.COLOR_BGR2GRAY)
+
+# Detecta faces na imagem
+faces = faces_cascade.detectMultiScale(imagem_cinza, scaleFactor=1.1, minNeighbors=5, minSize=(30, 30))
+
+
+#Desenha retângulos ao redor das faces detectados
+for (x, y, w, h) in faces:
+    cv2.rectangle(imagem, (x, y), (x+w, y+h), (0, 255, 0), 2)
+
+# Exibe a imagem com os faces detectados
+cv2.imshow('Detecção de Feces', imagem)
+cv2.waitKey(0)
+cv2.destroyAllWindows()
+
+#Modo diretorio 
+#defindo diretorio
+dir = 'D:\Dados\Material_complementar_reconhecimento_facial\pessoas'
+
+# Listando diretorio 
+files = os.listdir(dir)
+#Contagem de arquivos 
+num_files = len(files)
+
+print(f'Listando, contando e exibindo arquivos')
+print(f'Diretorio',dir)
+print(f'Total Arquivos:',num_files)
+time.sleep(5)
+
+# Loop sobre cada arquivo no diretório
+for num_files in files:
+    # Verifica se o arquivo é uma imagem
+    if num_files.endswith('.jpg') or num_files.endswith('.png'):
+        # Carrega a imagem
+        imagem = cv2.imread(os.path.join(dir, num_files))
+        # Converte a imagem para escala de cinza
+        imagem_cinza = cv2.cvtColor(imagem, cv2.COLOR_BGR2GRAY)
+        # Detecta faces na imagem
+        faces = faces_cascade.detectMultiScale(imagem_cinza, scaleFactor=1.1, minNeighbors=5, minSize=(30, 30))
+        # Desenha retângulos ao redor dos faces detectados
+        for (x, y, w, h) in faces:
+            cv2.rectangle(imagem, (x, y), (x+w, y+h), (255, 0, 0), 2)
+        # Exibe a imagem com os faces detectados
+        cv2.imshow('Face Detectados', imagem)
+        cv2.waitKey(0)
+
+
+# Variável para controlar se pelo menos um face foi detectado
+faces_detectados = False
+
+# Loop sobre cada arquivo no diretório
+for num_files in files:
+    # Verifica se o arquivo é uma imagem
+    if num_files.endswith('.jpg') or num_files.endswith('.png'):
+        # Carrega a imagem
+        imagem = cv2.imread(os.path.join(dir, num_files))
+        # Converte a imagem para escala de cinza
+        imagem_cinza = cv2.cvtColor(imagem, cv2.COLOR_BGR2GRAY)
+        # Detecta faces na imagem
+        faces = faces_cascade.detectMultiScale(imagem_cinza, scaleFactor=1.1, minNeighbors=5, minSize=(30, 30))
+        
+        # Se pelo menos um face for detectado
+        if len(faces) > 0:
+            # Define a variável para indicar que faces foram detectados
+            faces_detectados = True
+                # Desenha retângulos ao redor dos faces detectados
+            for (x, y, w, h) in faces:
+                cv2.rectangle(imagem, (x, y), (x+w, y+h), (255, 0, 0), 2)
+                # Exibe a imagem com os faces detectados
+                cv2.imshow('Faces Detectados', imagem)
+                cv2.waitKey(0)
+
+# Se nenhum face foi detectado
+if not faces_detectados:
+    print("Nenhum Face detectado.")
+
+
+cv2.destroyAllWindows()
+
+
 
 
 
