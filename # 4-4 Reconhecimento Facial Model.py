@@ -99,8 +99,6 @@ print("Treinamento realizado") # indica que o treinamento foi finalizado
 #depois de treinado ele vai gerar os arquivos que vão aparecer no menu ao lado e serão utilizados para o algoritmo de reconhecimento
 
 
-#Temp 
-
 #Reconhecedor_Eigenface
 
 # Importando as bibliotecas
