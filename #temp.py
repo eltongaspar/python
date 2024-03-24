@@ -1,41 +1,63 @@
 #Temp 
 
-#Reconhecedor_LBPH
 
+#Aprendizado com redes neurais
 # Importando as bibliotecas
 import cv2
+import os
+import numpy as np
+import tensorflow as tf
+from sklearn.model_selection import train_test_split
 
-arq_modelo_face = 'D:/Dados/Material_complementar_reconhecimento_facial/cascades/haarcascade_frontalface_default.xml'
+# Carregar as imagens e seus respectivos IDs
+def getImagemComId():
+    dir = 'D:/Dados/Material_complementar_reconhecimento_facial/capturas'
+    caminhos = [os.path.join(dir, f) for f in os.listdir(dir)]
+    faces = []
+    ids = []
+    for caminhoImagem in caminhos:
+        imagemFace = cv2.cvtColor(cv2.imread(caminhoImagem), cv2.COLOR_BGR2GRAY)
+        id = int(os.path.split(caminhoImagem)[-1].split('.')[1])
+        ids.append(id)
+        faces.append(imagemFace)
+    return np.array(ids), faces
 
-dir_cascates_LBPH = 'D:/Dados/Material_complementar_reconhecimento_facial/cascades/classificadorLBPH.yml'
+# Carregar os dados
+ids, faces = getImagemComId()
 
-detectorFace = cv2.CascadeClassifier(arq_modelo_face) # uso do haarcascade pora detectar face
-reconhecedor = cv2.face.LBPHFaceRecognizer_create() # traz a função do reconhecedor Eigenface
-reconhecedor.read(dir_cascates_LBPH) # traz o classificador treinado
-largura, altura = 200, 200 # dimensão da imagem
-font = cv2.FONT_HERSHEY_COMPLEX_SMALL # tipo de letra
-camera = cv2.VideoCapture(0) # inicia a webcam para realizar o reconhecimento baseado no classificador
+# Dividir os dados em conjuntos de treinamento e teste
+X_train, X_test, y_train, y_test = train_test_split(faces, ids, test_size=0.2, random_state=42)
 
-while True:
-    conectado, imagem = camera.read() # realiza a leitura pela webcam
-    imagemCinza = cv2.cvtColor(imagem, cv2.COLOR_BGR2GRAY) # transfoma a imagem em escala de cinza
-    facesDetectadas = detectorFace.detectMultiScale(imagemCinza, scaleFactor=1.5, minSize=(30, 30)) # detecta a face encontrada
+# Pré-processamento dos dados
+input_shape = (200, 200)  # dimensão da imagem
+X_train = np.array([cv2.resize(img, input_shape) for img in X_train])
+X_test = np.array([cv2.resize(img, input_shape) for img in X_test])
 
-    for (x, y, l, a) in facesDetectadas:
-        imagemFace = cv2.resize(imagemCinza[y:y + a, x:x + l], (largura, altura)) # redimensiona o tamanha da imagem capturada
-        cv2.rectangle(imagem, (x, y), (x + l, y + a), (0, 0, 255), 2) # desenha o retângulo da detecção
-        id, confianca = reconhecedor.predict(imagemFace) # realiza a predição do reconhecimento
-        nome = ""
-        if id == 1:
-            nome = 'sem macara' # reconhecimento sem uso de máscara, conforme reconhecedor
-        elif id == 2:
-            nome = 'com mascara' # reconhecimento com uso de máscara, conforme reconhecedor
-        cv2.putText(imagem, nome, (x, y + (a + 40)), font, 2, (0, 0, 255)) # escreve o texto do reconhecimento
-        cv2.putText(imagem, str(confianca), (x, y + (a + 60)), font, 1, (0, 0, 255)) # escreve o texto do intervalo de confiança
+# Normalização dos dados
+X_train = X_train.astype('float32') / 255.0
+X_test = X_test.astype('float32') / 255.0
 
-    cv2.imshow("Face", imagem) # mostra o título da janela
-    if cv2.waitKey(1) == ord('q'): # interrompe apertando a tecla Q
-        break
+# Definir a arquitetura da rede neural
+model = tf.keras.models.Sequential([
+    tf.keras.layers.Flatten(input_shape=input_shape),
+    tf.keras.layers.Dense(128, activation='relu'),
+    tf.keras.layers.Dense(64, activation='relu'),
+    tf.keras.layers.Dense(1, activation='sigmoid')
+])
 
-camera.release()
-cv2.destroyAllWindows()
+# Compilar o modelo
+model.compile(optimizer='adam',
+              loss='binary_crossentropy',
+              metrics=['accuracy'])
+
+# Treinar o modelo
+print("Treinando...")
+model.fit(X_train, y_train, epochs=10, batch_size=32, validation_split=0.2)
+
+# Avaliar o modelo
+loss, accuracy = model.evaluate(X_test, y_test)
+print("Accuracy:", accuracy)
+
+# Salvar o modelo
+model.save('D:/Dados/Material_complementar_reconhecimento_facial/cascades/modelo_rede_neural.h5')
+print("Modelo salvo com sucesso!")

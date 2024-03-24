@@ -1,6 +1,30 @@
 # 4-4 Reconhecimento Facial Model
 #Modelo 
 
+
+#Analisado os tres modelos de reconhecimentos
+
+#4-4- Reconhecimento Facial com Máscara e sem máscara 
+
+
+#Testado e avaliado os tres modelos 
+#-Eigenface
+#-Fisherface
+#-LBPH
+
+#Cada um possui suas particularidades, como desempenho, identificação, rastreio e acertibilidade.
+#Cada recurso possui suas vantagens e desvantagens na identificação facil com ou sem máscara.
+#Infelizmente o ambiente tem muitas influências, como luz, ângulo, resolução, escala, distância.
+#Os recursos de reconhecimento facial, assum como reconhecimento de olhos funcionam sem problemas, mas na identificação de máscara com ou sem que geram os problemas.
+#Os três recursos apresentados de forma forma conseguiram identificar, mas com muitos erros e com uma distância certa.
+#A identificação da mascára só funcionou em uma distância exata, fora dessa distância, o sistema não identificava a máscara.
+#O melhor recurso com mais peformace e acertividade foi Eigenface, o mesmo teve mais acertos com um tempo mais curto.
+#Talvez falte nesse sistemas, mais imagens para aprendizado e redes neurais.
+#Os testes realizados com 25 iemagens, 50 em um segundo momento e 100 no terceiro momento, não trouxeram grandes mudanças.
+#Talvez seja necessário uma escala maior de imagens para testes e identificações mais precisas e eficazes.
+
+
+
 #Captura 
 
 # 4.4 - Reconhecimento Facial 

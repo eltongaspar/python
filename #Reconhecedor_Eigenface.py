@@ -4,8 +4,8 @@
 import cv2
 
 arq_modelo_face = 'D:/Dados/Material_complementar_reconhecimento_facial/cascades/haarcascade_frontalface_default.xml'
-
 dir_cascates_Eigen = 'D:/Dados/Material_complementar_reconhecimento_facial/cascades/classificadorEigen.yml'
+
 
 detectorFace = cv2.CascadeClassifier(arq_modelo_face) # uso do haarcascade pora detectar face
 reconhecedor = cv2.face.EigenFaceRecognizer_create() # traz a função do reconhecedor Eigenface
