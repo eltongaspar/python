@@ -118,4 +118,223 @@ if not olhos_detectados:
 cv2.destroyAllWindows()
 
 
+#Treinamento 
+
+import cv2
+import numpy as np
+import os
+
+eigenface = cv2.face.EigenFaceRecognizer_create() # traz a função de reconhecimento Eigenface
+fisherface = cv2.face.FisherFaceRecognizer_create() # traz a função de reconhecimento Fisherface
+lbph = cv2.face.LBPHFaceRecognizer_create() # traz a função de reconhecimento LBPH
+
+# Listando diretorio 
+files = os.listdir(dir)
+#Contagem de arquivos 
+num_files = len(files)
+
+
+def carregar_imagens(files):
+    faces = []
+    ids = []
+    
+    for file in os.listdir(files):
+            imagem_face = cv2.imread(file, cv2.IMREAD_GRAYSCALE) # transforma as imagens em escala de cinza
+            ids = int(os.path.split(file)[-1].split('.')[1]) # verifica qual o id do identificador criado na captura
+            
+            faces.append(imagem_face)
+            ids.append(ids)
+        
+    return faces, np.array(ids)
+
+def treinar_eigenfaces(dir):
+
+    dir_cascates = 'D:/Dados/Material_complementar_reconhecimento_facial/cascades'
+    # Carregar as imagens e os rótulos
+    faces, ids = carregar_imagens(dir)
+
+    # Inicializar o reconhecedor de faces Eigenfaces
+    reconhecedor = cv2.face.EigenFaceRecognizer_create()
+
+    # Treinar o reconhecedor de faces
+    reconhecedor.train(faces, ids)
+
+    # Salvar o modelo treinado
+    reconhecedor.save(dir_cascates + "modelo_eigenfaces.yml")
+    print("Modelo treinado e salvo com sucesso.")
+
+# Diretório onde as imagens estão armazenadas (um diretório por pessoa)
+diretorio_dados = "dados_de_treinamento"
+
+# Chamar a função para treinar o modelo de Eigenfaces
+treinar_eigenfaces(dir)
+
+
+#Treinamento
+
+#Importando as bibliotecas
+import cv2
+import os
+import numpy as np
+
+eigenface = cv2.face.EigenFaceRecognizer_create() # traz a função de reconhecimento Eigenface
+fisherface = cv2.face.FisherFaceRecognizer_create() # traz a função de reconhecimento Fisherface
+lbph = cv2.face.LBPHFaceRecognizer_create() # traz a função de reconhecimento LBPH
+
+dir = 'D:/Dados/Material_complementar_reconhecimento_facial/capturas'
+
+def getImagemComId():
+    caminhos = [os.path.join(dir, f) for f in os.listdir(dir)] # irá percorrer todas as imagens da pasta fotos criada na captura
+    faces = []
+    ids = []
+    for caminhoImagem in caminhos:
+        imagemFace = cv2.cvtColor(cv2.imread(caminhoImagem), cv2.COLOR_BGR2GRAY) # transforma as imagens em escala de cinza
+        id = int(os.path.split(caminhoImagem)[-1].split('.')[1]) # verifica qual o id do identificador criado na captura
+        ids.append(id)
+        faces.append(imagemFace)
+    return np.array(ids), faces
+
+ids, faces = getImagemComId()
+
+dir_cascates = 'D:/Dados/Material_complementar_reconhecimento_facial/cascades/'
+
+print("Treinando...") # indicação que está havendo o treinamento, conforme o reconhecedor
+eigenface.train(faces, ids)
+eigenface.write(dir_cascates +  'classificadorEigen.yml') # realiza o treinamento e cria o classificador Eingeface
+
+fisherface.train(faces, ids)
+fisherface.write(dir_cascates + 'classificadorFisher.yml') # realiza o treinamento e cria o classificador Fisherface
+
+lbph.train(faces, ids)
+lbph.write(dir_cascates + 'classificadorLBPH.yml') # realiza o treinamento e cria o classificador LBPH
+
+print("Treinamento realizado") # indica que o treinamento foi finalizado
+#depois de treinado ele vai gerar os arquivos que vão aparecer no menu ao lado e serão utilizados para o algoritmo de reconhecimento
+
+
+#Reconhecedor_Eigenface
+
+# Importando as bibliotecas
+import cv2
+
+arq_modelo_face = 'D:/Dados/Material_complementar_reconhecimento_facial/cascades/haarcascade_frontalface_default.xml'
+
+dir_cascates_Eigen = 'D:/Dados/Material_complementar_reconhecimento_facial/cascades/classificadorEigen.yml'
+
+detectorFace = cv2.CascadeClassifier(arq_modelo_face) # uso do haarcascade pora detectar face
+reconhecedor = cv2.face.EigenFaceRecognizer_create() # traz a função do reconhecedor Eigenface
+reconhecedor.read(dir_cascates_Eigen ) # traz o classificador treinado
+largura, altura = 200, 200 # dimensão da imagem
+font = cv2.FONT_HERSHEY_COMPLEX_SMALL #tipo de letra
+camera = cv2.VideoCapture(0) # inicia a webcam para realizar o reconhecimento baseado no classificador
+
+while True:
+    conectado, imagem = camera.read() # realiza a leitura pela webcam
+    imagemCinza = cv2.cvtColor(imagem, cv2.COLOR_BGR2GRAY) # transfoma a imagem em escala de cinza
+    facesDetectadas = detectorFace.detectMultiScale(imagemCinza, scaleFactor=1.5, minSize=(30, 30)) # detecta a face encontrada
+
+    for (x, y, l, a) in facesDetectadas:
+        imagemFace = cv2.resize(imagemCinza[y:y + a, x:x + l], (largura, altura)) # redimensiona o tamanha da imagem capturada
+        cv2.rectangle(imagem, (x, y), (x + l, y + a), (0, 0, 255), 2) # desenha o retângulo da detecção
+        id, confianca = reconhecedor.predict(imagemFace) # realiza a predição do reconhecimento
+        nome = ""
+        if id == 1:
+            nome = 'sem macara' # reconhecimento sem uso de máscara, conforme reconhecedor
+        elif id == 2:
+            nome = 'com mascara' # reconhecimento com uso de máscara, conforme reconhecedor
+#        elif id == 3:
+#        nome = 'com oculos' # crie outras variações se desejar
+        cv2.putText(imagem, nome, (x, y + (a + 40)), font, 2, (0, 0, 255)) # escreve o texto do reconhecimento
+        cv2.putText(imagem, str(confianca), (x, y + (a + 60)), font, 1, (0, 0, 255)) # escreve o texto do intervalo de confiança
+
+    cv2.imshow("Face", imagem) # mostra o título da janela
+    if cv2.waitKey(1) == ord('q'): # interrompe apertando a tecla Q
+        break
+
+camera.release()
+cv2.destroyAllWindows()
+
+
+
+
+#Reconhecedor_Fisherface
+
+# Importando as bibliotecas
+import cv2
+
+arq_modelo_face = 'D:/Dados/Material_complementar_reconhecimento_facial/cascades/haarcascade_frontalface_default.xml'
+
+dir_cascates_Fisher = 'D:/Dados/Material_complementar_reconhecimento_facial/cascades/classificadorFisher.yml'
+
+detectorFace = cv2.CascadeClassifier(arq_modelo_face) # uso do haarcascade pora detectar face
+reconhecedor = cv2.face.FisherFaceRecognizer_create() # traz a função do reconhecedor Fisherface
+reconhecedor.read(dir_cascates_Fisher ) # traz o classificador treinado
+largura, altura = 200, 200 # dimensão da imagem
+font = cv2.FONT_HERSHEY_COMPLEX_SMALL # tipo de letra
+camera = cv2.VideoCapture(0) # inicia a webcam para realizar o reconhecimento baseado no classificador
+
+while True:
+    conectado, imagem = camera.read() # realiza a leitura pela webcam
+    imagemCinza = cv2.cvtColor(imagem, cv2.COLOR_BGR2GRAY) # transfoma a imagem em escala de cinza
+    facesDetectadas = detectorFace.detectMultiScale(imagemCinza, scaleFactor=1.5, minSize=(30, 30)) # detecta a face encontrada
+
+    for (x, y, l, a) in facesDetectadas:
+        imagemFace = cv2.resize(imagemCinza[y:y + a, x:x + l], (largura, altura)) # redimensiona o tamanha da imagem capturada
+        cv2.rectangle(imagem, (x, y), (x + l, y + a), (0, 0, 255), 2) # desenha o retângulo da detecção
+        id, confianca = reconhecedor.predict(imagemFace) # realiza a predição do reconhecimento
+        nome = ""
+        if id == 1:
+            nome = 'sem mascara' # reconhecimento sem uso de máscara, conforme reconhecedor
+        elif id == 2:
+            nome = 'com mascara' # reconhecimento com uso de máscara, conforme reconhecedor
+        cv2.putText(imagem, nome, (x, y + (a + 40)), font, 2, (0, 0, 255)) # escreve o texto do reconhecimento
+        cv2.putText(imagem, str(confianca), (x, y + (a + 60)), font, 1, (0, 0, 255)) # escreve o texto do intervalo de confiança
+
+    cv2.imshow("Face", imagem) # mostra o título da janela
+    if cv2.waitKey(1) == ord('q'): # interrompe apertando a tecla Q
+        break
+
+camera.release()
+cv2.destroyAllWindows()
+
+
+#Reconhecedor_LBPH
+
+# Importando as bibliotecas
+import cv2
+
+arq_modelo_face = 'D:/Dados/Material_complementar_reconhecimento_facial/cascades/haarcascade_frontalface_default.xml'
+
+dir_cascates_LBPH = 'D:/Dados/Material_complementar_reconhecimento_facial/cascades/classificadorLBPH.yml'
+
+detectorFace = cv2.CascadeClassifier(arq_modelo_face) # uso do haarcascade pora detectar face
+reconhecedor = cv2.face.LBPHFaceRecognizer_create() # traz a função do reconhecedor Eigenface
+reconhecedor.read(dir_cascates_LBPH) # traz o classificador treinado
+largura, altura = 200, 200 # dimensão da imagem
+font = cv2.FONT_HERSHEY_COMPLEX_SMALL # tipo de letra
+camera = cv2.VideoCapture(0) # inicia a webcam para realizar o reconhecimento baseado no classificador
+
+while True:
+    conectado, imagem = camera.read() # realiza a leitura pela webcam
+    imagemCinza = cv2.cvtColor(imagem, cv2.COLOR_BGR2GRAY) # transfoma a imagem em escala de cinza
+    facesDetectadas = detectorFace.detectMultiScale(imagemCinza, scaleFactor=1.5, minSize=(30, 30)) # detecta a face encontrada
+
+    for (x, y, l, a) in facesDetectadas:
+        imagemFace = cv2.resize(imagemCinza[y:y + a, x:x + l], (largura, altura)) # redimensiona o tamanha da imagem capturada
+        cv2.rectangle(imagem, (x, y), (x + l, y + a), (0, 0, 255), 2) # desenha o retângulo da detecção
+        id, confianca = reconhecedor.predict(imagemFace) # realiza a predição do reconhecimento
+        nome = ""
+        if id == 1:
+            nome = 'sem macara' # reconhecimento sem uso de máscara, conforme reconhecedor
+        elif id == 2:
+            nome = 'com mascara' # reconhecimento com uso de máscara, conforme reconhecedor
+        cv2.putText(imagem, nome, (x, y + (a + 40)), font, 2, (0, 0, 255)) # escreve o texto do reconhecimento
+        cv2.putText(imagem, str(confianca), (x, y + (a + 60)), font, 1, (0, 0, 255)) # escreve o texto do intervalo de confiança
+
+    cv2.imshow("Face", imagem) # mostra o título da janela
+    if cv2.waitKey(1) == ord('q'): # interrompe apertando a tecla Q
+        break
+
+camera.release()
+cv2.destroyAllWindows()
 
