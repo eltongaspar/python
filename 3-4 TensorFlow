@@ -98,9 +98,9 @@ mnist_train_images, mnist_test_images = mnist_train_images / 255.0, mnist_test_i
 model = Sequential([
 Flatten(input_shape=(28, 28)), # Camada de entrada (aplainamento da imagem 28x28)
 
-Dense(11128, activation='relu'), # Camada oculta com 128 neurônios
+Dense(2128, activation='relu'), # Camada oculta com 128 neurônios
 
-Dense(100, activation='softmax') # Camada de saída com 10 neurônios (um para cada dígito)
+Dense(200, activation='softmax') # Camada de saída com 10 neurônios (um para cada dígito)
 
 ])
 
@@ -145,7 +145,7 @@ metrics=['accuracy'])
 
 
 # Treinar o modelo
-history_tf = model.fit(mnist_train_images, mnist_train_labels,epochs=100,validation_split=0.2)
+history_tf = model.fit(mnist_train_images, mnist_train_labels,epochs=2000,validation_split=0.2)
 #O código  inicia o processo de treinamento do seu modelo de rede neural para reconhecimento de dígitos escritos à mão no TensorFlow/Keras.
 #1. model.fit():
 #Esse método é responsável por treinar o modelo. Ele recebe os dados de treinamento como entrada e iterativamente ajusta os pesos e polarizações da rede para minimizar a função de perda especificada durante a compilação.
