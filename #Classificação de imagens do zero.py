@@ -67,10 +67,7 @@ for images, labels in train_ds.take(1):
 
 #Usando aumento de dados de imagem
 #Quando você não tem um grande conjunto de dados de imagens, é uma boa prática introduzir artificialmente a diversidade de amostras aplicando transformações aleatórias, porém realistas, às imagens de treinamento, como inversão horizontal aleatória ou pequenas rotações aleatórias. Isso ajuda a expor o modelo a diferentes aspectos dos dados de treinamento, ao mesmo tempo que retarda o overfitting.
-data_augmentation_layers = [
-    layers.RandomFlip("horizontal"),
-    layers.RandomRotation(0.1),
-]
+data_augmentation_layers = [layers.RandomFlip("horizontal"),layers.RandomRotation(0.1),]
 
 
 def data_augmentation(images):
@@ -97,6 +94,7 @@ for images, _ in train_ds.take(1):
 #Com esta opção, o aumento dos seus dados acontecerá no dispositivo , de forma síncrona com o restante da execução do modelo, o que significa que ele se beneficiará da aceleração da GPU.
 #Observe que o aumento de dados está inativo no momento do teste, portanto, as amostras de entrada só serão aumentadas durante fit(), não ao chamar evaluate()ou predict().
 #Se você estiver treinando em GPU, esta pode ser uma boa opção.
+#input_shape = (28, 28, 1)  # Para imagens de 28x28 pixels em escala de cinza
 #inputs = keras.Input(shape=input_shape)
 #x = data_augmentation(inputs)
 #x = layers.Rescaling(1./255)(x)
@@ -111,10 +109,10 @@ augmented_train_ds = train_ds.map(lambda x, y: (data_augmentation(x, training=Tr
 #Configure o conjunto de dados para desempenho
 #Vamos aplicar o aumento de dados ao nosso conjunto de dados de treinamento e usar a pré-busca em buffer para que possamos gerar dados do disco sem que a E/S se torne um bloqueio:
 # Apply `data_augmentation` to the training images.
-#train_ds = train_ds.map(lambda img, label: (data_augmentation(img), label),num_parallel_calls=tf_data.AUTOTUNE,)
+train_ds = train_ds.map(lambda img, label: (data_augmentation(img), label),num_parallel_calls=tf_data.AUTOTUNE,)
 # Prefetching samples in GPU memory helps maximize GPU utilization.
-#rain_ds = train_ds.prefetch(tf_data.AUTOTUNE)
-#val_ds = val_ds.prefetch(tf_data.AUTOTUNE)
+train_ds = train_ds.prefetch(tf_data.AUTOTUNE)
+val_ds = val_ds.prefetch(tf_data.AUTOTUNE)
 
 #Construiremos uma versão pequena da rede Xception. Não tentamos particularmente otimizar a arquitetura; se você quiser fazer uma busca sistemática pela melhor configuração do modelo, considere usar KerasTuner .
 #Observe que:
@@ -163,29 +161,29 @@ def make_model(input_shape, num_classes):
     return keras.Model(inputs, outputs)
 
 
-#model = make_model(input_shape=image_size + (3,), num_classes=2)
-#keras.utils.plot_model(model, show_shapes=True)
+model = make_model(input_shape=image_size + (3,), num_classes=2)
+keras.utils.plot_model(model, show_shapes=True)
 
 #Treine o modelo
-#hegamos a mais de 90% de precisão de validação após treinar por 25 épocas no conjunto de dados completo (na prática, você pode treinar por mais de 50 épocas antes que o desempenho da validação comece a diminuir)
+#Chegamos a mais de 90% de precisão de validação após treinar por 25 épocas no conjunto de dados completo (na prática, você pode treinar por mais de 50 épocas antes que o desempenho da validação comece a diminuir)
 epochs = 25
 
-#callbacks = [keras.callbacks.ModelCheckpoint("save_at_{epoch}.keras"),]
-#model.compile(optimizer=keras.optimizers.Adam(3e-4),loss=keras.losses.BinaryCrossentropy(from_logits=True),metrics=[keras.metrics.BinaryAccuracy(name="acc")],)
-#model.fit(train_ds,epochs=epochs,callbacks=callbacks,validation_data=val_ds,)
+callbacks = [keras.callbacks.ModelCheckpoint("save_at_{epoch}.keras"),]
+model.compile(optimizer=keras.optimizers.Adam(3e-4),loss=keras.losses.BinaryCrossentropy(from_logits=True),metrics=[keras.metrics.BinaryAccuracy(name="acc")],)
+model.fit(train_ds,epochs=epochs,callbacks=callbacks,validation_data=val_ds,)
 
 #Execute inferência em novos dados
 #Observe que o aumento e a eliminação de dados estão inativos no momento da inferência.
 
-#img = keras.utils.load_img("PetImages/Cat/6779.jpg", target_size=image_size)
-#plt.imshow(img)
+img = keras.utils.load_img("PetImages/Cat/6779.jpg", target_size=image_size)
+plt.imshow(img)
 
-#img_array = keras.utils.img_to_array(img)
-#img_array = keras.ops.expand_dims(img_array, 0)  # Create batch axis
+img_array = keras.utils.img_to_array(img)
+img_array = keras.ops.expand_dims(img_array, 0)  # Create batch axis
 
-#predictions = model.predict(img_array)
-#score = float(keras.ops.sigmoid(predictions[0][0]))
-#print(f"This image is {100 * (1 - score):.2f}% cat and {100 * score:.2f}% dog.")
+predictions = model.predict(img_array)
+score = float(keras.ops.sigmoid(predictions[0][0]))
+print(f"This image is {100 * (1 - score):.2f}% cat and {100 * score:.2f}% dog.")
 
 
 
