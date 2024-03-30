@@ -44,7 +44,7 @@ for folder_name in ("Cat", "Dog"):
 print(f"Deleted {num_skipped} images.")
 
 #Gere um Dataset
-mage_size = (180, 180)
+image_size = (180, 180)
 batch_size = 128
 
 train_ds, val_ds = keras.utils.image_dataset_from_directory(
@@ -100,7 +100,7 @@ for images, _ in train_ds.take(1):
 inputs = keras.Input(shape=input_shape)
 x = data_augmentation(inputs)
 x = layers.Rescaling(1./255)(x)
-...  # Rest of the model
+#...  # Rest of the model
 
 #Opção 2: aplique ao conjunto de dados , de modo a obter um conjunto de dados que produza lotes de imagens aumentadas, assim:
 #Com esta opção, o aumento de seus dados acontecerá na CPU , de forma assíncrona, e será armazenado em buffer antes de entrar no modelo.
