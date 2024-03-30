@@ -143,9 +143,7 @@ def make_model(input_shape, num_classes):
         x = layers.MaxPooling2D(3, strides=2, padding="same")(x)
 
         # Project residual
-        residual = layers.Conv2D(size, 1, strides=2, padding="same")(
-            previous_block_activation
-        )
+        residual = layers.Conv2D(size, 1, strides=2, padding="same")(previous_block_activation)
         x = layers.add([x, residual])  # Add back residual
         previous_block_activation = x  # Set aside next residual
 
@@ -172,20 +170,9 @@ keras.utils.plot_model(model, show_shapes=True)
 #hegamos a mais de 90% de precisão de validação após treinar por 25 épocas no conjunto de dados completo (na prática, você pode treinar por mais de 50 épocas antes que o desempenho da validação comece a diminuir)
 epochs = 25
 
-callbacks = [
-    keras.callbacks.ModelCheckpoint("save_at_{epoch}.keras"),
-]
-model.compile(
-    optimizer=keras.optimizers.Adam(3e-4),
-    loss=keras.losses.BinaryCrossentropy(from_logits=True),
-    metrics=[keras.metrics.BinaryAccuracy(name="acc")],
-)
-model.fit(
-    train_ds,
-    epochs=epochs,
-    callbacks=callbacks,
-    validation_data=val_ds,
-)
+callbacks = [keras.callbacks.ModelCheckpoint("save_at_{epoch}.keras"),]
+model.compile(optimizer=keras.optimizers.Adam(3e-4),loss=keras.losses.BinaryCrossentropy(from_logits=True),metrics=[keras.metrics.BinaryAccuracy(name="acc")],)
+model.fit(train_ds,epochs=epochs,callbacks=callbacks,validation_data=val_ds,)
 
 #Execute inferência em novos dados
 #Observe que o aumento e a eliminação de dados estão inativos no momento da inferência.
