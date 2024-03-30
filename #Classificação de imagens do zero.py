@@ -106,16 +106,12 @@ for images, _ in train_ds.take(1):
 #Com esta opção, o aumento de seus dados acontecerá na CPU , de forma assíncrona, e será armazenado em buffer antes de entrar no modelo.
 #Se você estiver treinando em CPU, esta é a melhor opção, pois torna o aumento de dados assíncrono e sem bloqueio.
 #No nosso caso, optaremos pela segunda opção. Se você não tiver certeza de qual escolher, esta segunda opção (pré-processamento assíncrono) é sempre uma escolha sólida.
-augmented_train_ds = train_ds.map(
-    lambda x, y: (data_augmentation(x, training=True), y))
+augmented_train_ds = train_ds.map(lambda x, y: (data_augmentation(x, training=True), y))
 
 #Configure o conjunto de dados para desempenho
 #Vamos aplicar o aumento de dados ao nosso conjunto de dados de treinamento e usar a pré-busca em buffer para que possamos gerar dados do disco sem que a E/S se torne um bloqueio:
 # Apply `data_augmentation` to the training images.
-train_ds = train_ds.map(
-    lambda img, label: (data_augmentation(img), label),
-    num_parallel_calls=tf_data.AUTOTUNE,
-)
+train_ds = train_ds.map(lambda img, label: (data_augmentation(img), label),num_parallel_calls=tf_data.AUTOTUNE,)
 # Prefetching samples in GPU memory helps maximize GPU utilization.
 train_ds = train_ds.prefetch(tf_data.AUTOTUNE)
 val_ds = val_ds.prefetch(tf_data.AUTOTUNE)
