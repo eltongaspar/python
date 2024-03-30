@@ -97,17 +97,17 @@ for images, _ in train_ds.take(1):
 #Com esta opção, o aumento dos seus dados acontecerá no dispositivo , de forma síncrona com o restante da execução do modelo, o que significa que ele se beneficiará da aceleração da GPU.
 #Observe que o aumento de dados está inativo no momento do teste, portanto, as amostras de entrada só serão aumentadas durante fit(), não ao chamar evaluate()ou predict().
 #Se você estiver treinando em GPU, esta pode ser uma boa opção.
-inputs = keras.Input(shape=input_shape)
-x = data_augmentation(inputs)
-x = layers.Rescaling(1./255)(x)
+#inputs = keras.Input(shape=input_shape)
+#x = data_augmentation(inputs)
+#x = layers.Rescaling(1./255)(x)
 #...  # Rest of the model
 
 #Opção 2: aplique ao conjunto de dados , de modo a obter um conjunto de dados que produza lotes de imagens aumentadas, assim:
 #Com esta opção, o aumento de seus dados acontecerá na CPU , de forma assíncrona, e será armazenado em buffer antes de entrar no modelo.
 #Se você estiver treinando em CPU, esta é a melhor opção, pois torna o aumento de dados assíncrono e sem bloqueio.
 #No nosso caso, optaremos pela segunda opção. Se você não tiver certeza de qual escolher, esta segunda opção (pré-processamento assíncrono) é sempre uma escolha sólida.
-##augmented_train_ds = train_ds.map(
-  ##  lambda x, y: (data_augmentation(x, training=True), y))
+augmented_train_ds = train_ds.map(
+    lambda x, y: (data_augmentation(x, training=True), y))
 
 #Configure o conjunto de dados para desempenho
 #Vamos aplicar o aumento de dados ao nosso conjunto de dados de treinamento e usar a pré-busca em buffer para que possamos gerar dados do disco sem que a E/S se torne um bloqueio:
