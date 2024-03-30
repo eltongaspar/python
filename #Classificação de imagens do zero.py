@@ -111,10 +111,10 @@ augmented_train_ds = train_ds.map(lambda x, y: (data_augmentation(x, training=Tr
 #Configure o conjunto de dados para desempenho
 #Vamos aplicar o aumento de dados ao nosso conjunto de dados de treinamento e usar a pré-busca em buffer para que possamos gerar dados do disco sem que a E/S se torne um bloqueio:
 # Apply `data_augmentation` to the training images.
-train_ds = train_ds.map(lambda img, label: (data_augmentation(img), label),num_parallel_calls=tf_data.AUTOTUNE,)
+#train_ds = train_ds.map(lambda img, label: (data_augmentation(img), label),num_parallel_calls=tf_data.AUTOTUNE,)
 # Prefetching samples in GPU memory helps maximize GPU utilization.
-train_ds = train_ds.prefetch(tf_data.AUTOTUNE)
-val_ds = val_ds.prefetch(tf_data.AUTOTUNE)
+#rain_ds = train_ds.prefetch(tf_data.AUTOTUNE)
+#val_ds = val_ds.prefetch(tf_data.AUTOTUNE)
 
 #Construiremos uma versão pequena da rede Xception. Não tentamos particularmente otimizar a arquitetura; se você quiser fazer uma busca sistemática pela melhor configuração do modelo, considere usar KerasTuner .
 #Observe que:
@@ -163,29 +163,29 @@ def make_model(input_shape, num_classes):
     return keras.Model(inputs, outputs)
 
 
-model = make_model(input_shape=image_size + (3,), num_classes=2)
-keras.utils.plot_model(model, show_shapes=True)
+#model = make_model(input_shape=image_size + (3,), num_classes=2)
+#keras.utils.plot_model(model, show_shapes=True)
 
 #Treine o modelo
 #hegamos a mais de 90% de precisão de validação após treinar por 25 épocas no conjunto de dados completo (na prática, você pode treinar por mais de 50 épocas antes que o desempenho da validação comece a diminuir)
 epochs = 25
 
-callbacks = [keras.callbacks.ModelCheckpoint("save_at_{epoch}.keras"),]
-model.compile(optimizer=keras.optimizers.Adam(3e-4),loss=keras.losses.BinaryCrossentropy(from_logits=True),metrics=[keras.metrics.BinaryAccuracy(name="acc")],)
-model.fit(train_ds,epochs=epochs,callbacks=callbacks,validation_data=val_ds,)
+#callbacks = [keras.callbacks.ModelCheckpoint("save_at_{epoch}.keras"),]
+#model.compile(optimizer=keras.optimizers.Adam(3e-4),loss=keras.losses.BinaryCrossentropy(from_logits=True),metrics=[keras.metrics.BinaryAccuracy(name="acc")],)
+#model.fit(train_ds,epochs=epochs,callbacks=callbacks,validation_data=val_ds,)
 
 #Execute inferência em novos dados
 #Observe que o aumento e a eliminação de dados estão inativos no momento da inferência.
 
-img = keras.utils.load_img("PetImages/Cat/6779.jpg", target_size=image_size)
-plt.imshow(img)
+#img = keras.utils.load_img("PetImages/Cat/6779.jpg", target_size=image_size)
+#plt.imshow(img)
 
-img_array = keras.utils.img_to_array(img)
-img_array = keras.ops.expand_dims(img_array, 0)  # Create batch axis
+#img_array = keras.utils.img_to_array(img)
+#img_array = keras.ops.expand_dims(img_array, 0)  # Create batch axis
 
-predictions = model.predict(img_array)
-score = float(keras.ops.sigmoid(predictions[0][0]))
-print(f"This image is {100 * (1 - score):.2f}% cat and {100 * score:.2f}% dog.")
+#predictions = model.predict(img_array)
+#score = float(keras.ops.sigmoid(predictions[0][0]))
+#print(f"This image is {100 * (1 - score):.2f}% cat and {100 * score:.2f}% dog.")
 
 
 
