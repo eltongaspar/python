@@ -131,18 +131,19 @@ with open('network.json','w') as json_file:
   json_file.write(model_json)
 
   # Criando o arquivo de pesos (pesos.hdf5) do treinamento
-  dir_salv = 'D:/Dados/caes e gatos full/pesos.hdf5'
+  dir_salv_pesos_hdf5 = 'D:/Dados/caes e gatos full/pesos.hdf5'
 from keras.models import save_model
-network_saved = save_model(network, dir_salv)
+network_saved = save_model(network, dir_salv_pesos_hdf5)
 
 # Visualizando os dados salvos no arquivo .json
-with open('network.json', 'r') as json_file:
+dir_salv_json = 'D:/Dados/caes e gatos full/network.json'
+with open(dir_salv_json, 'r') as json_file:
   json_saved_model = json_file.read()
 json_saved_model
 
 # Atribuindo o treinamento ao modelo
 network_loaded = tf.keras.models.model_from_json(json_saved_model)
-network_loaded.load_weights('pesos.hdf5')
+network_loaded.load_weights(dir_salv_pesos_hdf5)
 network_loaded.compile(loss = 'categorical_crossentropy', optimizer='Adam', metrics=['accuracy'])
 
 # Visualizando o modelo de rede neural
