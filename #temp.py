@@ -20,6 +20,47 @@ import os
 import random
 from PIL import Image
 
+def escolher_arquivo_aleatorio(caminho_da_pasta):
+    # Lista todos os arquivos na pasta
+    arquivos = os.listdir(caminho_da_pasta)
+    
+    # Filtra apenas os arquivos (remove pastas)
+    arquivos = [arquivo for arquivo in arquivos if os.path.isfile(os.path.join(caminho_da_pasta, arquivo))]
+    
+    # Escolhe um arquivo aleatoriamente
+    arquivo_aleatorio = random.choice(arquivos)
+    
+    # Retorna o caminho completo do arquivo escolhido
+    return os.path.join(caminho_da_pasta, arquivo_aleatorio)
+
+# Exemplo de uso
+import os
+import random
+from PIL import Image
+
+def escolher_arquivo_aleatorio(caminho_da_pasta):
+    # Lista todos os arquivos na pasta
+    arquivos = os.listdir(caminho_da_pasta)
+    
+    # Filtra apenas os arquivos (remove pastas)
+    arquivos = [arquivo for arquivo in arquivos if os.path.isfile(os.path.join(caminho_da_pasta, arquivo))]
+    
+    # Escolhe um arquivo aleatoriamente
+    arquivo_aleatorio = random.choice(arquivos)
+    
+    # Retorna o caminho completo do arquivo escolhido
+    return os.path.join(caminho_da_pasta, arquivo_aleatorio)
+
+
+# Funcao Gerar numero
+def num_aleat(num_min,num_max):
+    import random
+    num_ger = random.randrange(num_min,num_max)
+    return num_ger
+
+
+
+
 # Conexão do Google Colava à pasta do Google Drive, local onde deverá ter salvo a pasta caes-e-gatos.zip
 #from google.colab import drive
 #drive.mount('/content/drive')
@@ -149,44 +190,6 @@ network_loaded.compile(loss = 'categorical_crossentropy', optimizer='Adam', metr
 # Visualizando o modelo de rede neural
 network_loaded.summary()
 
-
-def escolher_arquivo_aleatorio(caminho_da_pasta):
-    # Lista todos os arquivos na pasta
-    arquivos = os.listdir(caminho_da_pasta)
-    
-    # Filtra apenas os arquivos (remove pastas)
-    arquivos = [arquivo for arquivo in arquivos if os.path.isfile(os.path.join(caminho_da_pasta, arquivo))]
-    
-    # Escolhe um arquivo aleatoriamente
-    arquivo_aleatorio = random.choice(arquivos)
-    
-    # Retorna o caminho completo do arquivo escolhido
-    return os.path.join(caminho_da_pasta, arquivo_aleatorio)
-
-# Exemplo de uso
-import os
-import random
-from PIL import Image
-
-def escolher_arquivo_aleatorio(caminho_da_pasta):
-    # Lista todos os arquivos na pasta
-    arquivos = os.listdir(caminho_da_pasta)
-    
-    # Filtra apenas os arquivos (remove pastas)
-    arquivos = [arquivo for arquivo in arquivos if os.path.isfile(os.path.join(caminho_da_pasta, arquivo))]
-    
-    # Escolhe um arquivo aleatoriamente
-    arquivo_aleatorio = random.choice(arquivos)
-    
-    # Retorna o caminho completo do arquivo escolhido
-    return os.path.join(caminho_da_pasta, arquivo_aleatorio)
-
-
-# Funcao Gerar numero
-def num_aleat(num_min,num_max):
-    import random
-    num_ger = random.randrange(num_min,num_max)
-    return num_ger
 
 
 # Exemplo de uso
