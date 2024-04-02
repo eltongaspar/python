@@ -137,7 +137,7 @@ network_saved = save_model(network, dir_salv_pesos_hdf5)
 
 # Visualizando os dados salvos no arquivo .json
 dir_salv_json = 'D:/Dados/caes e gatos full/network.json'
-with open(dir_salv_json, 'r') as json_file:
+with open('network.json', 'r') as json_file:
   json_saved_model = json_file.read()
 json_saved_model
 
