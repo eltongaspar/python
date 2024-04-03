@@ -14,6 +14,7 @@ import seaborn as sns
 import zipfile
 import numpy as np
 import cv2
+import matplotlib.pyplot as plt
 #from google.colab.patches import cv2_imshow
 tf.__version__
 import os
@@ -130,7 +131,7 @@ network.compile(optimizer='Adam', loss='categorical_crossentropy', metrics = ['a
 
 # Treinando o modelo com 10 épocas de treinamento
 # OBSERVAÇÃO: esta execução pode demorar conforme o desempenho de sua máquina
-historico = network.fit(dataset_treinamento, epochs=1)
+historico = network.fit(dataset_treinamento, epochs=10)
 
 # Avaliação da rede neural
 # Estabelecendo índices para as classes no teste 0: cão e 1: gato
@@ -172,7 +173,7 @@ with open('network.json','w') as json_file:
   json_file.write(model_json)
 
   # Criando o arquivo de pesos (pesos.hdf5) do treinamento
-  dir_salv_pesos_hdf5 = 'D:/Dados/caes e gatos full/pesos.hdf5'
+dir_salv_pesos_hdf5 = 'D:/Dados/caes e gatos full/pesos.hdf5'
 from keras.models import save_model
 network_saved = save_model(network, dir_salv_pesos_hdf5)
 
@@ -192,7 +193,8 @@ network_loaded.summary()
 
 
 
-# Exemplo de uso
+# Gera um numero aleatorio de 1 a 4 para os diretorios 
+# Por funcao retorma o numero o numero aleatorio
 num_ger = num_aleat(1,4)
 
 if num_ger == 1:
@@ -204,36 +206,47 @@ elif num_ger == 3:
 elif num_ger == 4:
     caminho_da_pasta = 'D:/Dados/caes e gatos full/Treinamento/Gato'
 
+# Apos diretorio aleatorio, escolhe arquivo aleatorio para analise
+# Assim é possivel juntar mais de um diretório
 arquivo_aleatorio = escolher_arquivo_aleatorio(caminho_da_pasta)
 print("Arquivo escolhido aleatoriamente:", arquivo_aleatorio)
-# Abre o arquivo de imagem
-dir_arq_analise  = arquivo_aleatorio
-imagem = Image.open(arquivo_aleatorio)
-    
-# Exibe a imagem
-imagem.show()
+
+
+
 
 # Classificação de uma única imagem
 # Na pasta teste, localize qualquer imagem para a classificação, conforme o modelo treinado
-
-#imagem = cv2.imread(cat_arq_ini)
+# Abre o arquivo de imagem
+dir_arq_analise  = arquivo_aleatorio
+imagem = cv2.imread(arquivo_aleatorio)
+#imagem = Image.open(arquivo_aleatorio)
+   
+# Exibe a imagem
+plt.show()
+plt.imshow(imagem)
+#imagem.show()
 #imagem = cv2.imread('/content/caes-e-gatos/teste/cao/dog.3501.jpg')
-#cv2_imshow(imagem)
+
 
 # Redimensionando a imagem em 64x64 pixels
 imagem = imagem.resize((64, 64))
 # Exibe a imagem
-imagem.show()
+plt.show()
 
 # Convertendo em escala de cinza
+imagem = cv2.imread(arquivo_aleatorio)
+imagem = cv2.cvtColor(imagem, cv2.COLOR_BGR2GRAY)
 #imagem = imagem / 255
-imagem.convert('L')
+#imagem.convert('L')
 
 # Parâmetros da imagem redimensionada
-#imagem = imagem.reshape(-1, 64, 64, 3)
-#imagem.shape
-largura, altura = imagem.size
-canais_de_cores = len(imagem.getbands())
+#imagem = imagem.reshape(-1,64,64,3)
+#imagem = np.random.randint(0, 255, (218424,))
+imagem = cv2.imread(arquivo_aleatorio)
+imagem.shape
+#largura, altura = imagem.size
+#canais_de_cores = len(imagem.getbands())
+
 
 resultado = network_loaded(imagem)
 resultado
@@ -241,9 +254,11 @@ resultado
 # Demonstrando a classe que obteve o maior resultado
 resultado = np.argmax(resultado)
 resultado
+print(resultado)
 
 # Verificando as classes do modelo
 dataset_teste.class_indices
+print(dataset_teste)
 
 # Categorizando o resultado
 if resultado == 0:
