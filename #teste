@@ -130,7 +130,7 @@ network.compile(optimizer='Adam', loss='categorical_crossentropy', metrics = ['a
 
 # Treinando o modelo com 10 épocas de treinamento
 # OBSERVAÇÃO: esta execução pode demorar conforme o desempenho de sua máquina
-historico = network.fit(dataset_treinamento, epochs=1)
+historico = network.fit(dataset_treinamento, epochs=10)
 
 # Avaliação da rede neural
 # Estabelecendo índices para as classes no teste 0: cão e 1: gato
