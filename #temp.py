@@ -21,6 +21,13 @@ import os
 import random
 from PIL import Image
 
+#Calcular Tempo 
+import datetime
+data_hora_atual_ini = datetime.datetime.now()
+print(" \n Inicio",data_hora_atual_ini)
+
+
+
 def escolher_arquivo_aleatorio(caminho_da_pasta):
     # Lista todos os arquivos na pasta
     arquivos = os.listdir(caminho_da_pasta)
@@ -131,7 +138,7 @@ network.compile(optimizer='Adam', loss='categorical_crossentropy', metrics = ['a
 
 # Treinando o modelo com 10 épocas de treinamento
 # OBSERVAÇÃO: esta execução pode demorar conforme o desempenho de sua máquina
-historico = network.fit(dataset_treinamento, epochs=10)
+historico = network.fit(dataset_treinamento, epochs=1)
 
 # Avaliação da rede neural
 # Estabelecendo índices para as classes no teste 0: cão e 1: gato
@@ -265,3 +272,9 @@ if resultado == 0:
   print('Cão')
 else:
   print('Gato')
+
+  #Calcular Tempo 
+data_hora_atual_fim = datetime.datetime.now()
+print("\n Fim",data_hora_atual_fim)
+tempo = data_hora_atual_fim - data_hora_atual_ini
+print('\n Tempo',tempo)

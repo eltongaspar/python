@@ -20,6 +20,11 @@ import os
 import random
 from PIL import Image
 
+#Calcular Tempo 
+import datetime
+data_hora_atual_ini = datetime.datetime.now()
+print(" \n Inicio",data_hora_atual_ini)
+
 def escolher_arquivo_aleatorio(caminho_da_pasta):
     # Lista todos os arquivos na pasta
     arquivos = os.listdir(caminho_da_pasta)
@@ -72,16 +77,16 @@ def num_aleat(num_min,num_max):
 
 #Carregamento das imagens
 # Localizar o caminho da primeira imagem de gato na pasta treinamento
-cat_arq_ini = 'D:/Dados/Imagens/caes-e-gatos/treinamento/gato/cat.0.jpg'
+cat_arq_ini = 'D:/Dados/caes-e-gatos/caes-e-gatos/treinamento/gato/cat.0.jpg'
 tf.keras.preprocessing.image.load_img(cat_arq_ini)
 
 # Localizar o caminho da primeira imagem de cão na pasta treinamento
-dog_arq_ini = 'D:/Dados/Imagens/caes-e-gatos/treinamento/cao/dog.0.jpg'
+dog_arq_ini = 'D:/Dados/caes-e-gatos/caes-e-gatos/treinamento/cao/dog.0.jpg'
 tf.keras.preprocessing.image.load_img(dog_arq_ini)
 
 #Base de treinamento e teste
 # Localizar as 4000 imagens, nas duas classes para a base de treinamento
-dir_train = 'D:/Dados/Imagens/caes-e-gatos/treinamento/'
+dir_train = 'D:/Dados/caes-e-gatos/caes-e-gatos/treinamento/'
 gerador_treinamento = ImageDataGenerator(rescale=1./255,
                                         rotation_range=7,
                                         horizontal_flip=True,
@@ -98,7 +103,7 @@ dataset_treinamento = gerador_treinamento.flow_from_directory(dir_train,
 dataset_treinamento.class_indices                                                        
 
 # Localizar o campinho para a paste de teste, contendo 1000 imagens com as duas classes
-dir_test = 'D:/Dados/Imagens/caes-e-gatos/teste/'
+dir_test = 'D:/Dados/caes-e-gatos/caes-e-gatos/teste/'
 gerador_teste = ImageDataGenerator(rescale=1./255)
 dataset_teste = gerador_teste.flow_from_directory(dir_test,
                                                      target_size = (64, 64),
@@ -130,7 +135,7 @@ network.compile(optimizer='Adam', loss='categorical_crossentropy', metrics = ['a
 
 # Treinando o modelo com 10 épocas de treinamento
 # OBSERVAÇÃO: esta execução pode demorar conforme o desempenho de sua máquina
-historico = network.fit(dataset_treinamento, epochs=10)
+historico = network.fit(dataset_treinamento, epochs=1)
 
 # Avaliação da rede neural
 # Estabelecendo índices para as classes no teste 0: cão e 1: gato
@@ -172,12 +177,12 @@ with open('network.json','w') as json_file:
   json_file.write(model_json)
 
   # Criando o arquivo de pesos (pesos.hdf5) do treinamento
-dir_salv_pesos_keras = 'D:/Dados/caes e gatos full/pesos.keras'
+dir_salv_pesos_keras = 'D:/Dados/caes-e-gatos/caes-e-gatos/pesos.keras'
 from keras.models import save_model
 network_saved = save_model(network, dir_salv_pesos_keras)
 
 # Visualizando os dados salvos no arquivo .json
-dir_salv_json = 'D:/Dados/caes e gatos full/network.json'
+dir_salv_json = 'D:/Dados/caes-e-gatos/caes-e-gatos/network.json'
 with open('network.json', 'r') as json_file:
   json_saved_model = json_file.read()
 json_saved_model
@@ -197,13 +202,13 @@ network_loaded.summary()
 num_ger = num_aleat(1,4)
 
 if num_ger == 1:
-    caminho_da_pasta = 'D:/Dados/Imagens/caes-e-gatos/teste/cao/'
+    caminho_da_pasta = 'D:/Dados/caes-e-gatos/caes-e-gatos/teste/cao/'
 elif num_ger == 2:
-    caminho_da_pasta = 'D:/Dados/Imagens/caes-e-gatos/teste/gato/'
+    caminho_da_pasta = 'D:/Dados/caes-e-gatos/caes-e-gatos/teste/gato/'
 elif num_ger == 3:
-    caminho_da_pasta = 'D:/Dados/Imagens/caes-e-gatos/treinamento/cao/'
+    caminho_da_pasta = 'D:/Dados/caes-e-gatos/caes-e-gatos/treinamento/cao/'
 elif num_ger == 4:
-    caminho_da_pasta = 'D:/Dados/Imagens/caes-e-gatos/treinamento/gato/'
+    caminho_da_pasta = 'D:/Dados/caes-e-gatos/caes-e-gatos/treinamento/gato/'
 
 # Apos diretorio aleatorio, escolhe arquivo aleatorio para analise
 # Assim é possivel juntar mais de um diretório
@@ -257,3 +262,10 @@ if resultado == 0:
   print('Cão')
 else:
   print('Gato')
+
+  #Calcular Tempo 
+data_hora_atual_fim = datetime.datetime.now()
+print("\n Fim",data_hora_atual_fim)
+tempo = data_hora_atual_fim - data_hora_atual_ini
+print('\n Tempo',tempo)
+
