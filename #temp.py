@@ -103,5 +103,7 @@ dir_modelo_emotion = 'D:/Dados/Material_complementar_reconhecimento_emocoes/mode
 cascade_faces = dir_cascade_faces
 caminho_modelo = dir_modelo_emotion
 face_detection = cv2.CascadeClassifier(cascade_faces)
-classificador_emocoes = load_model(caminho_modelo, compile=False)
+
+
+#classificador_emocoes = load_model(caminho_modelo, compile=False)
 expressoes = ["Raiva", "Nojo", "Medo", "Feliz", "Triste", "Surpreso", "Neutro"]  # Expressões identificadas pelo modelo
