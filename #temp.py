@@ -20,13 +20,17 @@ import matplotlib.pyplot as plt
 #Parece que você está usando o ambiente do Google Colab e está tentando definir a versão do TensorFlow para 2.x. No Google Colab, você pode definir a versão do TensorFlow usando a mágica 
 
 #Impostando as bibliotecas
-import tensorflow
-##Importar a biblioteca TensorFlow
+import tensorflow as tf
+import keras
+#Importar a biblioteca TensorFlow
 from tensorflow.keras.models import load_model
 # Importar a função para carregar modelos previamente treinados
 from tensorflow.keras.preprocessing.image import img_to_array
 # Importar a função para converter uma imagem em uma matriz
-tensorflow.__version__
+#tensorflow.__version__
+
+print("Versão do TensorFlow:", tf.__version__)
+print("Versão do Keras:", keras.__version__)
 
 
 # Exemplo de uso
@@ -46,30 +50,12 @@ def escolher_arquivo_aleatorio(caminho_da_pasta):
     # Retorna o caminho completo do arquivo escolhido
     return os.path.join(caminho_da_pasta, arquivo_aleatorio)
 
-def escolher_arquivo_aleatorio(caminho_da_pasta):
-    # Lista todos os arquivos na pasta
-    arquivos = os.listdir(caminho_da_pasta)
-    
-    # Filtra apenas os arquivos (remove pastas)
-    arquivos = [arquivo for arquivo in arquivos if os.path.isfile(os.path.join(caminho_da_pasta, arquivo))]
-    
-    # Escolhe um arquivo aleatoriamente
-    arquivo_aleatorio = random.choice(arquivos)
-    
-    # Retorna o caminho completo do arquivo escolhido
-    return os.path.join(caminho_da_pasta, arquivo_aleatorio)
-
-
 # Funcao Gerar numero
 def num_aleat(num_min,num_max):
     import random
     num_ger = random.randrange(num_min,num_max)
     return num_ger
 
-
-#Carreganos os diretprios de imagens e modelos 
-dir_imagens = 'D:/Dados/Material_complementar_reconhecimento_emocoes/testes/'
-dir_modelo_emotion = 'D:/Dados/Material_complementar_reconhecimento_emocoes/modelo_01_expressoes.h5'
 
 # Conectando o Colab ao Google Drive
 #from google.colab import drive
@@ -94,11 +80,28 @@ if num_ger == 1 or num_ger == 2:
 arquivo_aleatorio = escolher_arquivo_aleatorio(caminho_da_pasta)
 print("Arquivo escolhido aleatoriamente:", arquivo_aleatorio)
 
-
 # Selecione uma imagem da pasta "testes" para o reconhecimento da emoção
 imagem = cv2.imread(arquivo_aleatorio) 
 #cv2_imshow(imagem)
 # Exibe a imagem
-plt.show()
 plt.imshow(imagem)
+plt.axis('off')  # Desativar eixos para uma visualização mais limpa
+plt.show()
 #imagem.show()
+
+#Testando o Detector
+#Carregamento dos modelos
+# Utilize um haarcasdade pré treinado para o reconhecimento facial
+# Utilize um modelo pré treinado para o reconhecimento das emoções
+
+#Carreganos os diretorios de imagens e modelos 
+# Caminhos dos arquivos
+dir_cascade_faces =  'D:/Dados/Material_complementar_reconhecimento_emocoes/haarcascade_frontalface_default.xml'
+dir_modelo_emotion = 'D:/Dados/Material_complementar_reconhecimento_emocoes/modelo_01_expressoes.h5'
+
+# Outras partes do seu código aqui (por exemplo, carregar o classificador de faces, etc.)
+cascade_faces = dir_cascade_faces
+caminho_modelo = dir_modelo_emotion
+face_detection = cv2.CascadeClassifier(cascade_faces)
+classificador_emocoes = load_model(caminho_modelo, compile=False)
+expressoes = ["Raiva", "Nojo", "Medo", "Feliz", "Triste", "Surpreso", "Neutro"]  # Expressões identificadas pelo modelo

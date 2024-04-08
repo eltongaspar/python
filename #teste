@@ -25,18 +25,6 @@ import datetime
 data_hora_atual_ini = datetime.datetime.now()
 print(" \n Inicio",data_hora_atual_ini)
 
-def escolher_arquivo_aleatorio(caminho_da_pasta):
-    # Lista todos os arquivos na pasta
-    arquivos = os.listdir(caminho_da_pasta)
-    
-    # Filtra apenas os arquivos (remove pastas)
-    arquivos = [arquivo for arquivo in arquivos if os.path.isfile(os.path.join(caminho_da_pasta, arquivo))]
-    
-    # Escolhe um arquivo aleatoriamente
-    arquivo_aleatorio = random.choice(arquivos)
-    
-    # Retorna o caminho completo do arquivo escolhido
-    return os.path.join(caminho_da_pasta, arquivo_aleatorio)
 
 # Exemplo de uso
 import os
