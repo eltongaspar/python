@@ -105,5 +105,99 @@ caminho_modelo = dir_modelo_emotion
 face_detection = cv2.CascadeClassifier(cascade_faces)
 
 
-#classificador_emocoes = load_model(caminho_modelo, compile=False)
+classificador_emocoes = load_model(caminho_modelo, compile=False)
 expressoes = ["Raiva", "Nojo", "Medo", "Feliz", "Triste", "Surpreso", "Neutro"]  # Expressões identificadas pelo modelo
+
+#Detecção de faces
+# Detecta faces na imagem selecionada
+original = imagem.copy()
+faces = face_detection.detectMultiScale(original, scaleFactor = 1.1,
+                                        minNeighbors = 3, minSize = (20,20))
+
+# Apresentação do array representando a localização (em pixels) das faces encontradas
+faces
+
+# Quantidade de faces encontradas pelo modelo
+len(faces)
+
+#Extração do ROI (região de interesse)
+# Convertendo a imagem em escala de cinza
+cinza = cv2.cvtColor(original, cv2.COLOR_BGR2GRAY)
+plt.imshow(imagem)
+plt.axis('off')  # Desativar eixos para uma visualização mais limpa
+plt.show()
+
+# Especificação da região de interesse, conforme a face detecada.
+# Retome a apresentação do array para especificar a regição de interesse. Ex: [381, 149, 140, 140]
+# Na posição do pixel 149, some 140 e, também, à posição do pixel 381, some 140.
+roi = cinza[149:149 + 140, 381:381 + 140]
+#cv2_imshow(roi)
+plt.imshow(imagem)
+plt.axis('off')  # Desativar eixos para uma visualização mais limpa
+plt.show()
+
+# Redimensionando a ROI
+roi = cv2.resize(roi, (48, 48))
+plt.imshow(imagem)
+plt.axis('off')  # Desativar eixos para uma visualização mais limpa
+plt.show()
+
+# Normalizando a ROI
+roi = roi / 255
+
+# Transformando a imagem da ROI em array
+roi = img_to_array(roi)
+
+# Expandindo as dimensões da ROI
+roi = np.expand_dims(roi, axis = 0)
+
+# Forma da ROI: (quantidade de imagens, pixel x, pixel y, quantidade de canais)
+roi.shape
+
+# Levantando as predições do classificador de emoções
+preds = classificador_emocoes.predict(roi)[0]
+preds
+
+# Quandidade de predições encontradas (referente a cada uma das 7 categorias de emoções)
+len(preds)
+
+# Retorno da predição com maior probabilidade
+emotion_probability = np.max(preds)
+emotion_probability
+
+# Categoria da máxima predição
+preds.argmax()
+
+# Demonstrando a categoria na classe correspondente
+label = expressoes[preds.argmax()]
+label
+
+
+# Escrevendo a emoção na imagem original
+# Desenhando um retângulo na face encontrada
+cv2.putText(original, label, (381, 149 - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.65,
+            (0, 0, 255), 2, cv2.LINE_AA)
+cv2.rectangle(original, (381, 149), (381 + 140, 149 + 140), (0, 0, 255), 2)
+plt.imshow(imagem)
+plt.axis('off')  # Desativar eixos para uma visualização mais limpa
+plt.show()
+
+probabilidades = np.ones((250,300,3), dtype= 'uint8') * 255 #inteiro
+
+
+# Demonstrando as probabilidades das categorias em barras
+plt.imshow(original)
+plt.axis('off')  # Desativar eixos para uma visualização mais limpa
+plt.show()
+
+if len(faces) == 2:
+  for (i, (emotion, prob)) in enumerate(zip(expressoes, preds)):
+    #print(i, emotion, prob)
+    text = "{}: {:.2f}%".format(emotion, prob * 100)
+    w = int(prob * 300)
+    cv2.rectangle(probabilidades, (7, (i * 35) + 5), (w, (i * 35) + 35), (200, 250, 20), -1)
+    cv2.putText(probabilidades, text, (10, (i * 35) + 23), cv2.FONT_HERSHEY_SIMPLEX, 0.45, (0, 0, 0), 1, cv2.LINE_AA)
+plt.imshow(probabilidades)
+plt.axis('off')  # Desativar eixos para uma visualização mais limpa
+plt.show()
+
