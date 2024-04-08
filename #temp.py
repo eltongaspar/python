@@ -123,7 +123,7 @@ len(faces)
 #Extração do ROI (região de interesse)
 # Convertendo a imagem em escala de cinza
 cinza = cv2.cvtColor(original, cv2.COLOR_BGR2GRAY)
-plt.imshow(imagem)
+plt.imshow(cinza)
 plt.axis('off')  # Desativar eixos para uma visualização mais limpa
 plt.show()
 
@@ -132,13 +132,13 @@ plt.show()
 # Na posição do pixel 149, some 140 e, também, à posição do pixel 381, some 140.
 roi = cinza[149:149 + 140, 381:381 + 140]
 #cv2_imshow(roi)
-plt.imshow(imagem)
+plt.imshow(roi)
 plt.axis('off')  # Desativar eixos para uma visualização mais limpa
 plt.show()
 
 # Redimensionando a ROI
 roi = cv2.resize(roi, (48, 48))
-plt.imshow(imagem)
+plt.imshow(roi)
 plt.axis('off')  # Desativar eixos para uma visualização mais limpa
 plt.show()
 
@@ -178,7 +178,7 @@ label
 cv2.putText(original, label, (381, 149 - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.65,
             (0, 0, 255), 2, cv2.LINE_AA)
 cv2.rectangle(original, (381, 149), (381 + 140, 149 + 140), (0, 0, 255), 2)
-plt.imshow(imagem)
+plt.imshow(original)
 plt.axis('off')  # Desativar eixos para uma visualização mais limpa
 plt.show()
 
