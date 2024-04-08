@@ -8,7 +8,7 @@ import time
 
 def capturar_imagens(num_imagens,dir):
     # Inicializar a câmera
-    cap = cv2.VideoCapture(0)qq
+    cap = cv2.VideoCapture(0)
     
     # Verificar se a câmera está sendo aberta corretamente
     if not cap.isOpened():
