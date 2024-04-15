@@ -1,162 +1,82 @@
 #Test
 
-#Importando as bibliotecas 
+#Exercicio  68
+#Rastreamento de objetos unicos 
 
+# Importando bibliotecas
 import cv2
-import numpy as np
-import pandas as pd
-from tensorflow import keras
-#from google.colab.patches import cv2_imshow
-import zipfile
+import sys
+from random import randint
 
+(major_ver, minor_ver, subminor_ver) = (cv2.__version__).split('.')
 
-import  tensorflow as tf
-# Criar uma constante TensorFlow
-tensor = tf.constant([1, 2, 3, 4, 5])
-print(tensor)
-#%tensorflow_version 2.x
+# Declarando os tipos de algoritmos de rastreamento
+tracker_types = ['BOOSTING', 'MIL', 'KCF', 'TLD', 'MEDIANFLOW', 'MOSSE', 'CSRT']
+# Escolhendo o algoritmo 0: BOOSTING, 1: MIL, 2: KCF, 3: TLD, 4: MEDIANFLOW, 5: MOSSE, 6: CSRT
+tracker_type = tracker_types[2] # Indique o classificador
+print(tracker_type)
 
-import tensorflow
-from tensorflow.keras.models import load_model
-from tensorflow.keras.preprocessing.image import img_to_array
-tensorflow.__version__
+if int(minor_ver) < 3:
+    tracker = tracker_type
+else:
+# Verificando qual o algoritmo escolhido
+   if tracker_type == 'BOOSTING':
+       tracker = cv2.legacy.TrackerBoosting_create()
+   if tracker_type == 'MIL':
+       tracker = cv2.legacy.TrackerMIL_create()
+   if tracker_type == 'KCF':
+       tracker = cv2.legacy.TrackerKCF_create()
+   if tracker_type == 'TLD':
+       tracker = cv2.legacy.TrackerTLD_create()
+   if tracker_type == 'MEDIANFLOW':
+       tracker = cv2.legacy.TrackerMedianFlow_create()
+   if tracker_type == 'MOSSE':
+       tracker = cv2.legacy.TrackerMOSSE_create()
+   if tracker_type == 'CSRT':
+       tracker = cv2.legacy.TrackerCSRT_create()
 
+video_path = 'D:/Dados/Material_complementar_rastreamento_objetos/videos/race.mp4'
 
-# Exemplo de uso
-import os
-import random
-from PIL import Image
-import matplotlib.pyplot as plt
+video = cv2.VideoCapture(video_path) # Localize o caminho do vídeo para análise, na pasta videos.
+if not video.isOpened():
+    print('Não foi possível carregar o vídeo')
+    sys.exit()
 
-def escolher_arquivo_aleatorio(caminho_da_pasta):
-    # Lista todos os arquivos na pasta
-    arquivos = os.listdir(caminho_da_pasta)
-    
-    # Filtra apenas os arquivos (remove pastas)
-    arquivos = [arquivo for arquivo in arquivos if os.path.isfile(os.path.join(caminho_da_pasta, arquivo))]
-    
-    # Escolhe um arquivo aleatoriamente
-    arquivo_aleatorio = random.choice(arquivos)
-    
-    # Retorna o caminho completo do arquivo escolhido
-    return os.path.join(caminho_da_pasta, arquivo_aleatorio)
+ok, frame = video.read() # Habilita a leitura do vídeo
+if not ok:
+    print('Não foi possível ler o arquivo de vídeo')
+    sys.exit()
 
-# Funcao Gerar numero
-def num_aleat(num_min,num_max):
-    import random
-    num_ger = random.randrange(num_min,num_max)
-    return num_ger
+bbox = cv2.selectROI(frame, False) # Cria o retângulo no objeto de interesse.
 
+ok = tracker.init(frame, bbox) # Habilita o rastreamento do objeto.
 
+colors = (randint(0, 255), randint(0, 255), randint(0, 255)) # Seleciona uma cor aleatória para o retângulo.
 
-#Conectando com o Drive e acessando os arquivos
-# Conectando o Colab ao Google Drive
-#from google.colab import drive
-#drive.mount('/content/gdrive')
+# Comandos para rastrear o objeto enquando vídeo estiver ativo.
+while True:
+    ok, frame = video.read()
+    if not ok:
+        break
 
-# Realize o dowload da pasta Material_complementar_reconhecimento_emocoes.zip do Google Sala de Aula e transfira-a para o seu Google Drive
-# Localize o caminho da pasta no menu Arquivos, no menu lateral esquerdo
-#path = "/content/gdrive/MyDrive/Material_complementar_reconhecimento_emocoes.zip"
-#zip_object = zipfile.ZipFile(file = path, mode = "r")
-#zip_object.extractall('./')
-#zip_object.close
+    timer = cv2.getTickCount()
+    ok, bbox = tracker.update(frame)
 
-# Gera um numero aleatorio de 1 a 4 para os diretorios 
-# Por funcao retorma o numero o numero aleatorio
-num_ger = num_aleat(1,2)
+    fps = cv2.getTickFrequency() / (cv2.getTickCount() - timer)
 
-if num_ger == 1 or num_ger == 2:
-    caminho_da_pasta = 'D:/Dados/Material_complementar_reconhecimento_emocoes/testes/'
+    if ok:
+        (x, y, w, h) = [int(v) for v in bbox]
+        cv2.rectangle(frame, (x, y), (x + w, y + h), colors, 2, 1)
+    else:
+        cv2.putText(frame, 'Falha no rastreamento', (100, 80),
+                    cv2.FONT_HERSHEY_SIMPLEX, .75, (0, 0, 255), 2)
 
-# Apos diretorio aleatorio, escolhe arquivo aleatorio para analise
-# Assim é possivel juntar mais de um diretório
-arquivo_aleatorio = escolher_arquivo_aleatorio(caminho_da_pasta)
-print("Arquivo escolhido aleatoriamente:", arquivo_aleatorio)
+    cv2.putText(frame, tracker_type + ' Tracker', (100, 20),
+                cv2.FONT_HERSHEY_SIMPLEX, .75, (0, 0, 255), 2)
 
+    cv2.putText(frame, 'FPS: ' + str(int(fps)), (100, 50),
+                cv2.FONT_HERSHEY_SIMPLEX, .75, (0, 0, 255), 2)
 
-
-# Selecione uma imagem da pasta "testes" para o reconhecimento da emoção
-imagem = cv2.imread(arquivo_aleatorio)
-#cv2_imshow(imagem)
-# Exibe a imagem
-plt.imshow(imagem)
-plt.axis('off')  # Desativar eixos para uma visualização mais limpa
-plt.show()
-
-
-#Testando o detector
-# Utilize um haarcasdade pré treinado para o reconhecimento facial
-# Utilize um modelo pré treinado para o reconhecimento das emoções
-# Caminhos dos arquivos
-dir_cascade_faces =  'D:/Dados/Material_complementar_reconhecimento_emocoes/haarcascade_frontalface_default.xml'
-dir_modelo_emotion = 'D:/Dados/Material_complementar_reconhecimento_emocoes/modelo_01_expressoes.h5'
-cascade_faces = dir_cascade_faces
-caminho_modelo = dir_modelo_emotion
-face_detection = cv2.CascadeClassifier(cascade_faces)
-
-from tensorflow import keras
-
-# Carregar o modelo
-#lassificador_emocoes = load_model(caminho_modelo, compile = False)
-expressoes = ["Raiva", "Nojo", "Medo", "Feliz", "Triste", "Surpreso", "Neutro"]
-#Detecção de faces
-faces = face_detection.detectMultiScale(imagem, scaleFactor = 1.05,
-                                        minNeighbors = 5, minSize = (40,40))
-faces
-# Quantidade de faces encontradas pelo modelo
-len(faces)
-
-#Processamento para cada rosto detectado
-# Convertendo a imagem em escala de cinza
-cinza = cv2.cvtColor(imagem, cv2.COLOR_BGR2GRAY)
-plt.imshow(cinza)
-plt.axis('off')  # Desativar eixos para uma visualização mais limpa
-plt.show()
-#cv2_imshow(cinza)
-
-#Com o for são realizados as etapas para cada face detectada:
-#Extração do ROI (região de interesse)
-#Redimensionamento
-#Normalização
-#Previsões e resultado
-
-original = imagem.copy()
-
-for (x, y, w, h) in faces:
-  # Extração do ROI (região de interesse)
-  roi = cinza[y:y + h, x:x + w] # utiliza-se as coordenadas (onde inicia a face) e a largura e altura para extrair a região de interesse
-
-  # Redimensiona imagem
-  roi = cv2.resize(roi, (48, 48))
-
-  plt.imshow(roi)
-  plt.axis('off')  # Desativar eixos para uma visualização mais limpa
-  plt.show()
-  #cv2_imshow(roi)
-
-  # Normalização
-  roi = roi.astype("float") / 255
-  roi = img_to_array(roi)
-  roi = np.expand_dims(roi, axis = 0)
-
-  # Previsões
-  preds = classificador_emocoes.predict(roi)[0]
-  print(preds)
-
-  # Emoção detectada
-  emotion_probability = np.max(preds)
-  print(emotion_probability)
-
-  print(preds.argmax())
-  label = expressoes[preds.argmax()]
-
-
-  # Mostra resultado na tela para o rosto
-  cv2.putText(original, label, (x, y - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.65,
-            (0, 0, 255), 2, cv2.LINE_AA)
-  cv2.rectangle(original, (x, y), (x + w, y + h), (0, 0, 255), 2)
-
-
-#Resultado final
-#Perceba que no resultado final algumas faces não foram detectadas pelo haarscascade. Para solucionar, você pode fazer ajustes nos parâmetros no método detectMultiScale
-#Na última imagem, o algoritmo detectou duas faces. Também poderiam ser feito ajustes nos parâmetros ou então utilizar o Dlib para a detecção de faces, que é uma biblioteca com resultados melhores.
+    cv2.imshow('Tracking', frame)
+    if cv2.waitKey(1) & 0XFF == 27:
+        break
