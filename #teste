@@ -1,82 +1,62 @@
 #Test
 
-#Exercicio  68
-#Rastreamento de objetos unicos 
 
-# Importando bibliotecas
+#Exercicio  70
+#Implemente um algoritmo, em Python, de Aprendizado de Máquina para
+#construir um algoritmo de rastreamento de objetos pela webcam.
+
 import cv2
-import sys
-from random import randint
 
-(major_ver, minor_ver, subminor_ver) = (cv2.__version__).split('.')
+# Função para selecionar o objeto a ser rastreado
+def selecionar_objeto(frame):
+    bbox = cv2.selectROI("Selecione o objeto", frame, False)
+    return bbox
 
-# Declarando os tipos de algoritmos de rastreamento
-tracker_types = ['BOOSTING', 'MIL', 'KCF', 'TLD', 'MEDIANFLOW', 'MOSSE', 'CSRT']
-# Escolhendo o algoritmo 0: BOOSTING, 1: MIL, 2: KCF, 3: TLD, 4: MEDIANFLOW, 5: MOSSE, 6: CSRT
-tracker_type = tracker_types[2] # Indique o classificador
-print(tracker_type)
+# Captura de vídeo da webcam
+cap = cv2.VideoCapture(0)
 
-if int(minor_ver) < 3:
-    tracker = tracker_type
-else:
-# Verificando qual o algoritmo escolhido
-   if tracker_type == 'BOOSTING':
-       tracker = cv2.legacy.TrackerBoosting_create()
-   if tracker_type == 'MIL':
-       tracker = cv2.legacy.TrackerMIL_create()
-   if tracker_type == 'KCF':
-       tracker = cv2.legacy.TrackerKCF_create()
-   if tracker_type == 'TLD':
-       tracker = cv2.legacy.TrackerTLD_create()
-   if tracker_type == 'MEDIANFLOW':
-       tracker = cv2.legacy.TrackerMedianFlow_create()
-   if tracker_type == 'MOSSE':
-       tracker = cv2.legacy.TrackerMOSSE_create()
-   if tracker_type == 'CSRT':
-       tracker = cv2.legacy.TrackerCSRT_create()
+# Verifica se a webcam está funcionando corretamente
+if not cap.isOpened():
+    print("Erro ao abrir a webcam")
+    exit()
 
-video_path = 'D:/Dados/Material_complementar_rastreamento_objetos/videos/race.mp4'
+# Leitura do primeiro frame
+ret, frame = cap.read()
 
-video = cv2.VideoCapture(video_path) # Localize o caminho do vídeo para análise, na pasta videos.
-if not video.isOpened():
-    print('Não foi possível carregar o vídeo')
-    sys.exit()
+# Seleciona o objeto a ser rastreado
+bbox = selecionar_objeto(frame)
 
-ok, frame = video.read() # Habilita a leitura do vídeo
-if not ok:
-    print('Não foi possível ler o arquivo de vídeo')
-    sys.exit()
+# Inicializa o rastreador KCF
+tracker = cv2.TrackerKCF_create()
 
-bbox = cv2.selectROI(frame, False) # Cria o retângulo no objeto de interesse.
+# Inicializa o rastreamento
+ok = tracker.init(frame, bbox)
 
-ok = tracker.init(frame, bbox) # Habilita o rastreamento do objeto.
-
-colors = (randint(0, 255), randint(0, 255), randint(0, 255)) # Seleciona uma cor aleatória para o retângulo.
-
-# Comandos para rastrear o objeto enquando vídeo estiver ativo.
 while True:
-    ok, frame = video.read()
-    if not ok:
+    # Captura um novo frame
+    ret, frame = cap.read()
+
+    if not ret:
         break
 
-    timer = cv2.getTickCount()
+    # Atualiza o rastreamento
     ok, bbox = tracker.update(frame)
 
-    fps = cv2.getTickFrequency() / (cv2.getTickCount() - timer)
-
+    # Desenha a caixa delimitadora do objeto rastreado
     if ok:
-        (x, y, w, h) = [int(v) for v in bbox]
-        cv2.rectangle(frame, (x, y), (x + w, y + h), colors, 2, 1)
+        p1 = (int(bbox[0]), int(bbox[1]))
+        p2 = (int(bbox[0] + bbox[2]), int(bbox[1] + bbox[3]))
+        cv2.rectangle(frame, p1, p2, (0, 255, 0), 2)
     else:
-        cv2.putText(frame, 'Falha no rastreamento', (100, 80),
-                    cv2.FONT_HERSHEY_SIMPLEX, .75, (0, 0, 255), 2)
+        cv2.putText(frame, "Erro de rastreamento", (100,80), cv2.FONT_HERSHEY_SIMPLEX, 0.75,(0,0,255),2)
 
-    cv2.putText(frame, tracker_type + ' Tracker', (100, 20),
-                cv2.FONT_HERSHEY_SIMPLEX, .75, (0, 0, 255), 2)
+    # Mostra o frame com a caixa delimitadora
+    cv2.imshow("Rastreamento de objetos", frame)
 
-    cv2.putText(frame, 'FPS: ' + str(int(fps)), (100, 50),
-                cv2.FONT_HERSHEY_SIMPLEX, .75, (0, 0, 255), 2)
-
-    cv2.imshow('Tracking', frame)
-    if cv2.waitKey(1) & 0XFF == 27:
+    # Sai do loop se a tecla 'q' for pressionada
+    if cv2.waitKey(1) & 0xFF == ord('q'):
         break
+
+# Libera os recursos
+cap.release()
+cv2.destroyAllWindows()
