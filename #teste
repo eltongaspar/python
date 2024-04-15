@@ -1,60 +1,71 @@
 #Test
 
 
-#Exercicio  70
+#Exercicio  71 
 #Implemente um algoritmo, em Python, de Aprendizado de Máquina para
-#construir um algoritmo de rastreamento de objetos pela webcam.
+#rastreamento de objeto, com análise do movimento em um vídeo, aplicando o
+#conceito de fluxo óptico esparso.
+
+
 
 import cv2
+import numpy as np
 
-# Função para selecionar o objeto a ser rastreado
-def selecionar_objeto(frame):
-    bbox = cv2.selectROI("Selecione o objeto", frame, False)
-    return bbox
+# Captura de vídeo
+video_path = "D:/Dados/Material_complementar_rastreamento_objetos/videos/walking.avi"
+cap = cv2.VideoCapture(video_path)
 
-# Captura de vídeo da webcam
-cap = cv2.VideoCapture(0)
+# Inicialização do rastreador de fluxo óptico
+lk_params = dict(winSize=(15, 15),
+                 maxLevel=2,
+                 criteria=(cv2.TERM_CRITERIA_EPS | cv2.TERM_CRITERIA_COUNT, 10, 0.03))
 
-# Verifica se a webcam está funcionando corretamente
-if not cap.isOpened():
-    print("Erro ao abrir a webcam")
-    exit()
+# Cores para desenhar os vetores de fluxo óptico
+color = np.random.randint(0, 255, (100, 3))
 
-# Leitura do primeiro frame
-ret, frame = cap.read()
+# Captura o primeiro quadro
+ret, old_frame = cap.read()
+old_gray = cv2.cvtColor(old_frame, cv2.COLOR_BGR2GRAY)
 
-# Seleciona o objeto a ser rastreado
-bbox = selecionar_objeto(frame)
+# Detecta características no primeiro quadro
+p0 = cv2.goodFeaturesToTrack(old_gray, mask=None, maxCorners=100, qualityLevel=0.3, minDistance=7, blockSize=7)
 
-# Inicializa o rastreador KCF
-tracker = cv2.TrackerKCF_create()
-
-# Inicializa o rastreamento
-ok = tracker.init(frame, bbox)
+# Cria uma máscara para desenhar os vetores de fluxo óptico
+mask = np.zeros_like(old_frame)
 
 while True:
-    # Captura um novo frame
     ret, frame = cap.read()
-
     if not ret:
         break
+    frame_gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 
-    # Atualiza o rastreamento
-    ok, bbox = tracker.update(frame)
 
-    # Desenha a caixa delimitadora do objeto rastreado
-    if ok:
-        p1 = (int(bbox[0]), int(bbox[1]))
-        p2 = (int(bbox[0] + bbox[2]), int(bbox[1] + bbox[3]))
-        cv2.rectangle(frame, p1, p2, (0, 255, 0), 2)
-    else:
-        cv2.putText(frame, "Erro de rastreamento", (100,80), cv2.FONT_HERSHEY_SIMPLEX, 0.75,(0,0,255),2)
+  
+    # Calcula o fluxo óptico
+    p1, st, err = cv2.calcOpticalFlowPyrLK(old_gray, frame_gray, p0, None, **lk_params)
 
-    # Mostra o frame com a caixa delimitadora
-    cv2.imshow("Rastreamento de objetos", frame)
+    # Seleciona os pontos válidos (st = 1)
+    good_new = p1[st == 1]
+    good_old = p0[st == 1]
+
+    # Desenha as trilhas dos pontos de interesse
+    for i, (new, old) in enumerate(zip(good_new, good_old)):
+        a, b = new.ravel()
+        c, d = old.ravel()
+        mask = cv2.line(mask, (a, b), (c, d), color[i].tolist(), 2)
+        frame = cv2.circle(frame, (a, b), 5, color[i].tolist(), -1)
+    
+    # Combina a máscara com o quadro original
+    img = cv2.add(frame, mask)
+
+    # Exibe o resultado
+    cv2.imshow('Fluxo Óptico Esparsa', img)
+    
+    # Atualiza os pontos de interesse
+    p0 = good_new.reshape(-1, 1, 2)
 
     # Sai do loop se a tecla 'q' for pressionada
-    if cv2.waitKey(1) & 0xFF == ord('q'):
+    if cv2.waitKey(30) & 0xFF == ord('q'):
         break
 
 # Libera os recursos
