@@ -1,73 +1,57 @@
 #Test
 
-
-#Exercicio  71 
-#Implemente um algoritmo, em Python, de Aprendizado de Máquina para
-#rastreamento de objeto, com análise do movimento em um vídeo, aplicando o
-#conceito de fluxo óptico esparso.
+# 7-4 Rastreamento de objetos   
+#Estudo de Caso
+#Dense Optical Flow
 
 
-
+# Importando bibliotecas
 import cv2
 import numpy as np
 
-# Captura de vídeo
+# Carrega um vídeo para análise do arquivo especificado
 video_path = "D:/Dados/Material_complementar_rastreamento_objetos/videos/walking.avi"
 cap = cv2.VideoCapture(video_path)
+ret, first_frame = cap.read() # Lê o primeiro frame do vídeo
+frame_gray_init = cv2.cvtColor(first_frame, cv2.COLOR_BGR2GRAY) # Converte o primeiro frame para escala de cinza
 
-# Inicialização do rastreador de fluxo óptico
-lk_params = dict(winSize=(15, 15),
-                 maxLevel=2,
-                 criteria=(cv2.TERM_CRITERIA_EPS | cv2.TERM_CRITERIA_COUNT, 10, 0.03))
+# Cria uma matriz HSV (hue, saturation, value) com as mesmas dimensões e tipo do frame
+hsv = np.zeros_like(first_frame)
+hsv[..., 1] = 255
 
-# Cores para desenhar os vetores de fluxo óptico
-color = np.random.randint(0, 255, (100, 3))
-
-# Captura o primeiro quadro
-ret, old_frame = cap.read()
-old_gray = cv2.cvtColor(old_frame, cv2.COLOR_BGR2GRAY)
-
-# Detecta características no primeiro quadro
-p0 = cv2.goodFeaturesToTrack(old_gray, mask=None, maxCorners=100, qualityLevel=0.3, minDistance=7, blockSize=7)
-
-# Cria uma máscara para desenhar os vetores de fluxo óptico
-mask = np.zeros_like(old_frame)
-
+# Loop para processar cada frame do vídeo
 while True:
-    ret, frame = cap.read()
-    if not ret:
-        break
-    frame_gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+    ret, frame = cap.read() # Lê o frame atual do vídeo
+    frame_gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY) # Converte o frame atual para escala de cinza
 
+    # Calcula o fluxo óptico denso usando o algoritmo de Farneback
+    flow = cv2.calcOpticalFlowFarneback(frame_gray_init,
+                                        frame_gray,
+                                        None,
+                                        0.5,  # Escala de pirâmide
+                                        3,    # Níveis de pirâmide
+                                        15,   # Tamanho da janela
+                                        3,    # Iterações em cada nível de pirâmide
+                                        5,    # Tamanho do pixel vizinho
+                                        1.2,  # Constante de suavização
+                                        0)    # Flags
+    # Converte as componentes do fluxo (x, y) em magnitude e ângulo
+    magnitude, angle = cv2.cartToPolar(flow[...,0], flow[...,1])
+    # Ajusta o canal de matiz (hue) da matriz HSV com base no ângulo
+    hsv[...,0] = angle * (180 / (np.pi / 2))
+    # Normaliza a magnitude para o intervalo [0, 255] e ajusta o canal de valor da matriz HSV
+    hsv[...,2] = cv2.normalize(magnitude, None, 0, 255, cv2.NORM_MINMAX)
+    # Converte a matriz HSV de volta para o espaço de cores BGR para visualização
+    final = cv2.cvtColor(hsv, cv2.COLOR_HSV2BGR)
 
-  
-    # Calcula o fluxo óptico
-    p1, st, err = cv2.calcOpticalFlowPyrLK(old_gray, frame_gray, p0, None, **lk_params)
-
-    # Seleciona os pontos válidos (st = 1)
-    good_new = p1[st == 1]
-    good_old = p0[st == 1]
-
-    # Desenha as trilhas dos pontos de interesse
-    for i, (new, old) in enumerate(zip(good_new, good_old)):
-        a, b = new.ravel()
-        c, d = old.ravel()
-        mask = cv2.line(mask, (a, b), (c, d), color[i].tolist(), 2)
-        frame = cv2.circle(frame, (a, b), 5, color[i].tolist(), -1)
-    
-    # Combina a máscara com o quadro original
-    img = cv2.add(frame, mask)
-
-    # Exibe o resultado
-    cv2.imshow('Fluxo Óptico Esparsa', img)
-    
-    # Atualiza os pontos de interesse
-    p0 = good_new.reshape(-1, 1, 2)
-
-    # Sai do loop se a tecla 'q' for pressionada
-    if cv2.waitKey(30) & 0xFF == ord('q'):
+    # Exibe o resultado do fluxo óptico denso em uma janela
+    cv2.imshow('Dense optical flow', final)
+    if cv2.waitKey(1) == 13:     # Aguarda por uma tecla ser pressionada; se a tecla 'Enter' for pressionada, interrompe o loop
         break
 
-# Libera os recursos
+    # Atualiza o frame inicial para o frame atual para a próxima iteração
+    frame_gray_init = frame_gray
+
+# Libera a captura de vídeo e fecha todas as janelas abertas
 cap.release()
 cv2.destroyAllWindows()
