@@ -1,57 +1,43 @@
 #Test
 
-# 7-4 Rastreamento de objetos   
-#Estudo de Caso
-#Dense Optical Flow
+# Exerciocio 72 
+# Extrator de Textos 
 
 
-# Importando bibliotecas
-import cv2
+# Realize o import das bibliotecas
+import pytesseract
 import numpy as np
+import cv2 # OpenCV
+#from google.colab.patches import cv2_imshow
+import zipfile
+import matplotlib.pyplot as plt
 
-# Carrega um vídeo para análise do arquivo especificado
-video_path = "D:/Dados/Material_complementar_rastreamento_objetos/videos/walking.avi"
-cap = cv2.VideoCapture(video_path)
-ret, first_frame = cap.read() # Lê o primeiro frame do vídeo
-frame_gray_init = cv2.cvtColor(first_frame, cv2.COLOR_BGR2GRAY) # Converte o primeiro frame para escala de cinza
+print (pytesseract)
 
-# Cria uma matriz HSV (hue, saturation, value) com as mesmas dimensões e tipo do frame
-hsv = np.zeros_like(first_frame)
-hsv[..., 1] = 255
+# Conectando o Colab ao Google Drive
+#rom google.colab import drive
+#drive.mount('/content/gdrive')
 
-# Loop para processar cada frame do vídeo
-while True:
-    ret, frame = cap.read() # Lê o frame atual do vídeo
-    frame_gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY) # Converte o frame atual para escala de cinza
+# Realize o dowload da pasta Material_complementar_reconhecimento_texto.zip do Google Sala de Aula e transfira-a para o seu Google Drive
+# Localize o caminho da pasta no menu Arquivos, no menu lateral esquerdo
+#path = "/content/gdrive/MyDrive/Material_complementar_reconhecimento_texto.zip"
+#zip_object = zipfile.ZipFile(file=path, mode="r")
+#zip_object.extractall("./")
 
-    # Calcula o fluxo óptico denso usando o algoritmo de Farneback
-    flow = cv2.calcOpticalFlowFarneback(frame_gray_init,
-                                        frame_gray,
-                                        None,
-                                        0.5,  # Escala de pirâmide
-                                        3,    # Níveis de pirâmide
-                                        15,   # Tamanho da janela
-                                        3,    # Iterações em cada nível de pirâmide
-                                        5,    # Tamanho do pixel vizinho
-                                        1.2,  # Constante de suavização
-                                        0)    # Flags
-    # Converte as componentes do fluxo (x, y) em magnitude e ângulo
-    magnitude, angle = cv2.cartToPolar(flow[...,0], flow[...,1])
-    # Ajusta o canal de matiz (hue) da matriz HSV com base no ângulo
-    hsv[...,0] = angle * (180 / (np.pi / 2))
-    # Normaliza a magnitude para o intervalo [0, 255] e ajusta o canal de valor da matriz HSV
-    hsv[...,2] = cv2.normalize(magnitude, None, 0, 255, cv2.NORM_MINMAX)
-    # Converte a matriz HSV de volta para o espaço de cores BGR para visualização
-    final = cv2.cvtColor(hsv, cv2.COLOR_HSV2BGR)
+# Carregue a imagem teste01.jpg da pasta compartilhada no Google Sala de Aula para dentro do Colab, aba Arquivos.
+img = cv2.imread('D:/Dados/Material_complementar_reconhecimento_texto/imagens/teste01.jpg')
+#cv2_imshow(img) # BGR (RGB)
+plt.imshow(img)
+plt.axis('off')  # Desativar eixos para uma visualização mais limpa
+plt.show()
 
-    # Exibe o resultado do fluxo óptico denso em uma janela
-    cv2.imshow('Dense optical flow', final)
-    if cv2.waitKey(1) == 13:     # Aguarda por uma tecla ser pressionada; se a tecla 'Enter' for pressionada, interrompe o loop
-        break
+# Transforme a imagem do padrão BGR para RGB
+rgb = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+#cv2_imshow(rgb)
+plt.imshow(img)
+plt.axis('off')  # Desativar eixos para uma visualização mais limpa
+plt.show()
 
-    # Atualiza o frame inicial para o frame atual para a próxima iteração
-    frame_gray_init = frame_gray
-
-# Libera a captura de vídeo e fecha todas as janelas abertas
-cap.release()
-cv2.destroyAllWindows()
+# Da imagem, a função irá extrair os caracteres encontrados.
+texto = pytesseract.image_to_string(rgb)
+#print(texto)
