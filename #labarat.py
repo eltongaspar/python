@@ -1,39 +1,110 @@
-#Python
 import random
 
-# Definir as cartas
-naipes = ["Ouro", "Espada", "Copo", "Pau"]
-valores = ["A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"]
+def escolher_palavra():
+    palavras = ["python", "programacao", "computador", "desenvolvimento", "jogo", "internet", "software"]
+    return random.choice(palavras).upper()
 
-# Criar a pilha de cartas
-baralho = []
-for naipe in naipes:
-  for valor in valores:
-    carta = naipe + " " + valor
-    baralho.append(carta)
+def exibir_forca(tentativas):
+    estagios = [
+        """
+           -----
+           |   |
+           O   |
+          /|\\  |
+          / \\  |
+              |
+        ---------
+        """,
+        """
+           -----
+           |   |
+           O   |
+          /|\\  |
+          /    |
+              |
+        ---------
+        """,
+        """
+           -----
+           |   |
+           O   |
+          /|\\  |
+               |
+              |
+        ---------
+        """,
+        """
+           -----
+           |   |
+           O   |
+          /|   |
+               |
+              |
+        ---------
+        """,
+        """
+           -----
+           |   |
+           O   |
+           |   |
+               |
+              |
+        ---------
+        """,
+        """
+           -----
+           |   |
+           O   |
+               |
+               |
+              |
+        ---------
+        """,
+        """
+           -----
+           |   |
+               |
+               |
+               |
+              |
+        ---------
+        """
+    ]
+    print(estagios[tentativas])
 
-# Embaralhar o baralho
-random.shuffle(baralho)
+def jogar():
+    palavra = escolher_palavra()
+    letras_adivinhadas = set()
+    tentativas = 6
 
-# Distribuir as cartas
-jogador1 = []
-jogador2 = []
+    print("Bem-vindo ao jogo da Forca!")
+    print("_ " * len(palavra))
 
-for i in range(len(baralho)):
-  if i % 2 == 0:
-    jogador1.append(baralho[i])
-  else:
-    jogador2.append(baralho[i])
+    while tentativas > 0:
+        letra = input("Digite uma letra: ").upper()
 
-# Mostrar as cartas do jogador 1
-print("Cartas do Jogador 1:")
-for carta in jogador1:
-  print(carta)
+        if letra in letras_adivinhadas:
+            print("Você já tentou essa letra. Tente novamente.")
+            continue
 
-# Mostrar as cartas do jogador 2
-print("\nCartas do Jogador 2:")
-for carta in jogador2:
-  print(carta)
+        letras_adivinhadas.add(letra)
 
-# Implementar a lógica do jogo (opcional)
-# ...
+        if letra in palavra:
+            print(f"Boa! A letra {letra} está na palavra.")
+        else:
+            tentativas -= 1
+            print(f"Errado! A letra {letra} não está na palavra. Você tem {tentativas} tentativas restantes.")
+        
+        exibir_forca(tentativas)
+
+        palavra_oculta = "".join([letra if letra in letras_adivinhadas else "_" for letra in palavra])
+        print(" ".join(palavra_oculta))
+
+        if "_" not in palavra_oculta:
+            print("Parabéns! Você adivinhou a palavra!")
+            break
+    else:
+        print(f"Você perdeu! A palavra era {palavra}.")
+
+if __name__ == "__main__":
+    jogar()
