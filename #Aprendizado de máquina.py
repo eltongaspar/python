@@ -30,7 +30,7 @@ ys = np.array([-2.0, 1.0, 4.0, 7.0, 10.0, 13.0], dtype=float)
 
 
 #4. Treinar a rede neural
-model.fit(xs, ys, epochs=1)
+model.fit(xs, ys, epochs=500)
 #O processo de treinamento da rede neural, em que aprende a relação entre X's e Y's, está na chamada model.fit. É a etapa em que ele passará pelo loop antes de tentar adivinhar, medir o desempenho do jogo (da perda) ou usar o otimizador para fazer outra estimativa. Isso acontecerá pelo número de períodos que você especificar. Ao executar esse código, a perda será exibida em cada época.
 #Por exemplo, você pode ver que, nas primeiras épocas, o valor da perda é muito grande, mas diminui a cada etapa.
 #Conforme o treinamento avança, a perda fica muito pequena em breve.
