@@ -79,7 +79,11 @@ def main():
     while infinito != 1 and infinito != 2:
         infinito = int(input('Deseja ativar Modo Loop: 1-Sim/2-Nao: '))
 
-    lInfinit = infinito == 1
+        if infinito == 1:
+            lInfinit = True
+
+        if infinito == 2:
+            lInfinit = False
 
     if not lInfinit:
         FuncaoTelaPergunt()
