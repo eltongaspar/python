@@ -51,9 +51,33 @@ def FuncaoTelaPergunt():
 
 
 
-def FuncaoTela():
-    """Simula a função FuncaoTela do Clipper."""
-    input("Pressione Enter para continuar...")
+import time
+
+def FuncaoTela(lWait=False, lInkey=False, iTempInkey=0):
+  """Simulates the FuncaoTela function from Clipper.
+
+  Args:
+    lWait: If True, pauses execution and waits for a key press.
+    lInkey: If True, reads a key press with a timeout.
+    iTempInkey: Timeout in seconds for INKEY (only if lInkey is True).
+
+  Returns:
+    None
+  """
+  if lWait:
+    input("Aperte uma Tecla para Continuar ")
+  
+  if lInkey:
+    time.sleep(iTempInkey) 
+    # Note: Python's input() function doesn't have a direct equivalent
+    # to Clipper's INKEY with a timeout. This implementation only waits
+    # for the specified time and doesn't read a key press. 
+    # You might need a more sophisticated solution using libraries 
+    # like `msvcrt` (Windows) or `termios` (Linux/macOS) for 
+    # non-blocking key input with timeouts.
+
+  return None
+
 
 # --- Fim das funções auxiliares ---
 
