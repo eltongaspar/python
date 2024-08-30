@@ -27,7 +27,7 @@ def FuncaoTelaPergunt():
     lWait = False
     lInkey = False
     iWaittValid = 0
-    iInkeytValid = 1
+    iInkeytValid = 0
     iTempInkey = 1
 
     while iWaittValid != 1 and iWaittValid != 2:
@@ -53,7 +53,7 @@ def FuncaoTelaPergunt():
 
 import time
 
-def FuncaoTela(lWait=False, lInkey=False, iTempInkey=0):
+def FuncaoTela(lWait=False, lInkey=False, iTempInkey=0): 
   """Simulates the FuncaoTela function from Clipper.
 
   Args:
@@ -109,7 +109,7 @@ def main():
         if infinito == 2:
             lInfinit = False
 
-    if not lInfinit:
+    if not lInfinit or lInfinit == True:
         FuncaoTelaPergunt()
         FuncaoTela()
 
@@ -190,10 +190,20 @@ def main():
         FuncaoTela()
 
         # Encontrando a posição da carta na lista
+        posicao_carta = -1  # Initialize with a default value
         for i, carta_info in enumerate(cartas_embaralhadas_completo):
             if carta_info[0] == carta_pesquisa and carta_info[1] == naipe_pesquisa:
                 posicao_carta = i
                 break
+
+        if posicao_carta != -1:  # Check if the card was found
+            print("Posicao Matriz")
+            print(posicao_carta)
+
+            # ... (rest of your code to handle the found card)
+        else:
+            print(f"Carta {carta_pesquisa} de {naipe_pesquisa} não encontrada no baralho.")
+
 
         print("Posicao Matriz")
         print(posicao_carta)
@@ -223,7 +233,10 @@ def main():
                 break
 
         # Substituindo a carta na matriz
-        matriz_cartas[posicao_carta // 7][posicao_carta % 7] = nova_carta_info
+        if 0 <= posicao_carta < len(matriz_cartas) * len(matriz_cartas[0]):  # Check if posicao_carta is within bounds
+            matriz_cartas[posicao_carta // 7][posicao_carta % 7] = nova_carta_info
+        else:
+            print(f"Posição da carta inválida: {posicao_carta}")
 
         MsgLoad('Cartas Trocadas', 5)
         print('Posicao')
