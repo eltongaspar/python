@@ -17,7 +17,7 @@ xs = np.array([-1.0, 0.0, 1.0, 2.0, 3.0, 4.0], dtype=float)
 ys = np.array([-2.0, 1.0, 4.0, 7.0, 10.0, 13.0], dtype=float)
 
 # Treinar a rede neural
-model.fit(xs, ys, epochs=500)  # Treine por mais épocas para um ajuste melhor
+model.fit(xs, ys, epochs=1)  # Treine por mais épocas para um ajuste melhor
 
 # Use o modelo
 # Faça uma predição com o modelo treinado
