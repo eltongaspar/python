@@ -145,7 +145,7 @@ metrics=['accuracy'])
 
 
 # Treinar o modelo
-history_tf = model.fit(mnist_train_images, mnist_train_labels,epochs=2000,validation_split=0.2)
+history_tf = model.fit(mnist_train_images, mnist_train_labels,epochs=7777,validation_split=0.2)
 #O código  inicia o processo de treinamento do seu modelo de rede neural para reconhecimento de dígitos escritos à mão no TensorFlow/Keras.
 #1. model.fit():
 #Esse método é responsável por treinar o modelo. Ele recebe os dados de treinamento como entrada e iterativamente ajusta os pesos e polarizações da rede para minimizar a função de perda especificada durante a compilação.
