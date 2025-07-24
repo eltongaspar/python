@@ -34,7 +34,7 @@ test_images = test_images / 255.0
 #Vamos agora projetar o modelo. Existem alguns conceitos novos aqui, mas não se preocupe, você vai pegar o jeito.
 model = tf.keras.models.Sequential([tf.keras.layers.Flatten(), 
                                     tf.keras.layers.Dense(1024, activation=tf.nn.relu), 
-                                    tf.keras.layers.Dense(100, activation=tf.nn.softmax)])
+                                    tf.keras.layers.Dense(1000, activation=tf.nn.softmax)])
 
 
 #Sequencial: Isso define uma SEQUÊNCIA de camadas na rede neural
