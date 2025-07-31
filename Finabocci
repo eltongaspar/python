@@ -1,0 +1,75 @@
+import matplotlib.pyplot as plt
+
+def fibonacci():
+    mFibonacci = [0]
+    iNumAtual = 1
+    iNumAnt = 0
+    iResultFibonacci = 0
+    iTotalFibonacci = 0
+    iQtdeNum = 0
+    cTemp = ''
+    saida_texto = []  # Coleta das saídas para o arquivo
+
+    while True:
+        try:
+            iNumFibonacci = int(input("Informe um número inteiro para calcular o Fibonacci: "))
+            break
+        except ValueError:
+            print("Valor inválido. Por favor, insira um número inteiro.")
+
+    iNumFibonacci -= 1
+    iCont2 = 0
+
+    while iCont2 < iNumFibonacci:
+        iResultFibonacci = iNumAnt + iNumAtual
+        mFibonacci.append(iResultFibonacci)
+        iTotalFibonacci += iResultFibonacci
+
+        cTemp = str(iResultFibonacci)
+        iQtdeNum = len(cTemp)
+
+        # Impressões intermediárias
+        info = f"Fibonacci {iCont2 + 2}: {cTemp}\nQtde Casas Decimais: {iQtdeNum}\n-----"
+        print(info)
+        saida_texto.append(info)
+
+        iNumAnt = iNumAtual
+        iNumAtual = iResultFibonacci
+        iCont2 += 1
+
+    iTotalFibonacci += 1
+
+    final_info = [
+        "\nResultado Final: " + str(iTotalFibonacci),
+        "Sequência de Fibonacci: " + str(mFibonacci),
+        "Último número da sequência: " + cTemp,
+        "Qtde de casas decimais do último número: " + str(iQtdeNum)
+    ]
+
+    for linha in final_info:
+        print(linha)
+        saida_texto.append(linha)
+
+    # Salva em arquivo
+    with open("fibonacci_saida.txt", "w", encoding="utf-8") as f:
+        for linha in saida_texto:
+            f.write(linha + "\n")
+
+    print("\n📝 Saída salva em 'fibonacci_saida.txt'")
+
+    # Gera gráfico
+    plt.figure(figsize=(10, 6))
+    plt.plot(mFibonacci, marker='o', linestyle='-', color='blue')
+    plt.title(f"Sequência de Fibonacci ({len(mFibonacci)} termos)")
+    plt.xlabel("Posição na sequência")
+    plt.ylabel("Valor")
+    plt.grid(True)
+    plt.tight_layout()
+    plt.savefig("fibonacci_grafico.png")
+    plt.show()
+
+    print("📊 Gráfico salvo como 'fibonacci_grafico.png'")
+
+    return mFibonacci
+
+fibonacci()

@@ -1,0 +1,17 @@
+Fibonacci 2: 1
+Qtde Casas Decimais: 1
+-----
+Fibonacci 3: 2
+Qtde Casas Decimais: 1
+-----
+Fibonacci 4: 3
+Qtde Casas Decimais: 1
+-----
+Fibonacci 5: 5
+Qtde Casas Decimais: 1
+-----
+
+Resultado Final: 12
+Sequência de Fibonacci: [0, 1, 2, 3, 5]
+Último número da sequência: 5
+Qtde de casas decimais do último número: 1
