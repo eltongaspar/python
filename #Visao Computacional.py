@@ -49,7 +49,7 @@ model.compile(optimizer = tf.keras.optimizers.Adam(),
               loss = 'sparse_categorical_crossentropy',
               metrics=['accuracy'])
 
-model.fit(training_images, training_labels, epochs=100)
+model.fit(training_images, training_labels, epochs=10)
 
 #Depois de concluir o treinamento - você deverá ver um valor de precisão no final da época final. Pode parecer algo como 0,9098. Isso indica que sua rede neural tem cerca de 91% de precisão na classificação dos dados de treinamento. Ou seja, descobriu uma correspondência de padrão entre a imagem e os rótulos que funcionou 91% das vezes. Não é ótimo, mas não é ruim, considerando que foi treinado apenas por 5 épocas e feito rapidamente.
 #Mas como isso funcionaria com dados invisíveis? É por isso que temos as imagens de teste. Podemos chamar model.evaluate e passar os dois conjuntos, e ele reportará a perda de cada um. Vamos tentar:
