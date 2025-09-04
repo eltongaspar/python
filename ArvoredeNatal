@@ -1,0 +1,11 @@
+def arvore_natal(altura):
+    # Parte de cima (folhas)
+    for i in range(altura):
+        print(" " * (altura - i - 1) + "*" * (2 * i + 1))
+    
+    # Tronco
+    for _ in range(2):
+        print(" " * (altura - 1) + "||")
+
+# Chamada da função
+arvore_natal(8)
