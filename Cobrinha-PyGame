@@ -1,0 +1,76 @@
+import pygame
+from pygame.locals import *
+from sys import exit
+from random import randint
+
+
+altura=480
+largura=640
+x_s=300
+y_s=200
+x_a=randint(20,620)
+y_a=randint(20,440)
+pontos=0
+
+
+list_body=[]
+framerate = pygame.time.Clock()
+
+pygame.init()
+
+tela = pygame.display.set_mode((largura,altura))
+
+pygame.display.set_caption("Primeiro Jogo")
+
+def grow_snake(lista_corpo):
+    for XY in lista_corpo:
+        pygame.draw.rect(tela,(0,255,0),(XY[0],XY[1],20,20))
+
+while True:
+    framerate.tick(60)
+    tela.fill((255,255,255))
+
+    fonte = pygame.font.SysFont('arial', 40, True, True)
+    mensagem = f"Pontos: {pontos}"
+    textopontos = fonte.render(mensagem,True,(0,0,0))
+
+    for event in pygame.event.get():
+        if event.type == QUIT:
+            pygame.quit()
+            exit()
+
+        # if event.type == KEYDOWN:
+        #     if event.key == K_LEFT:
+        #         x-=20
+        #     if event.key == K_RIGHT:
+        #         x+=20
+        #     if event.key == K_UP:
+        #         y-=20
+        #     if event.key == K_DOWN:
+        #         y+=20
+
+    if pygame.key.get_pressed()[K_LEFT]:
+        x_s-=5
+    if pygame.key.get_pressed()[K_RIGHT]:
+        x_s+=5
+    if pygame.key.get_pressed()[K_UP]:
+        y_s-=5
+    if pygame.key.get_pressed()[K_DOWN]:
+        y_s+=5
+
+    snake = pygame.draw.rect(tela,(0,255,0),(x_s,y_s,20,20))
+    apple = pygame.draw.rect(tela,(255,0,0),(x_a,y_a,20,20))
+
+    if snake.colliderect(apple):
+        x_a = randint(20, 620)
+        y_a = randint(20, 440)
+        pontos+=1
+
+    list_head=[]
+    list_head.append(x_s)
+    list_head.append(y_s)
+    list_body.append(list_head)
+    grow_snake(list_body)
+
+    tela.blit(textopontos,(420,30))
+    pygame.display.flip()
